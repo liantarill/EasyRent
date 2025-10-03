@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration
 {
     /**
@@ -17,6 +19,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone_number')->nullable();
+            $table->string('profile_picture')->default('profile.png');
+            $table->string('id_card_photo')->nullable();
+            $table->enum('role', ['customer', 'admin'])->default('customer');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });
