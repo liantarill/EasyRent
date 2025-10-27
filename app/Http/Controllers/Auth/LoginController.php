@@ -18,15 +18,14 @@ class LoginController extends Controller
     {
         $credentials = $request->validate([
             'email' => 'required|email:dns',
-            'password' => 'required',
-            'acive' => 1
+            'password' => 'required'
         ]);
 
 
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            return redirect()->intended('dashboard')->with('success', 'Selamat datang, ' . $request->user()->username . '!');
         }
         return back()->with('failed', 'Username atau Password Salah');
     }
