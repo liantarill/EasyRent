@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('rents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->uuid('user_id');
+            $table->uuid('approved_by')->nullable();
             $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->date('rent_date');
             $table->date('return_date');
             $table->decimal('daily_price_snapshot', 12, 2);
             $table->decimal('total_price', 12, 2);
             $table->enum('rent_status', ['Pending Verification', 'Verified', 'Rejected'])->default('Pending Verification');
-            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
     }

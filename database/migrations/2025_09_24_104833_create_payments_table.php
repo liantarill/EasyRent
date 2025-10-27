@@ -18,7 +18,10 @@ return new class extends Migration
             $table->enum('method', ['cash', 'bank_transfer', 'credit_card', 'e_wallet']);
             $table->enum('status', ['Pending', 'Paid', 'Failed'])->default('Pending');
             $table->string('payment_proof')->nullable();
-            $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete();
+
+
+            $table->uuid('verified_by')->nullable();
+            $table->foreign('verified_by')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
     }
