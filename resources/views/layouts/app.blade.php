@@ -27,15 +27,26 @@
         }
     </script>
 
+    @stack('styles')
     <style>
         body {
             font-family: "Poppins", sans-serif;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
     <title>EasyRent</title>
 </head>
 
-<body>
+<body class="bg-primary-pale">
     @yield('content')
 </body>
 
