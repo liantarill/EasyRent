@@ -15,13 +15,22 @@
         tailwind.config = {
             theme: {
                 extend: {
+                    // colors: {
+                    //     'primary-main': '#2d5a8c',
+                    //     'primary-dark': '#1e3a5f',
+                    //     'primary-light': '#4a7ba7',
+                    //     'primary-accent': '#6b94b8',
+                    //     'primary-pale': '#f0f5fa',
+                    // }
+
                     colors: {
-                        'primary-main': '#2d5a8c',
-                        'primary-dark': '#1e3a5f',
-                        'primary-light': '#4a7ba7',
-                        'primary-accent': '#6b94b8',
-                        'primary-pale': '#f0f5fa',
+                        'primary-main': '#EA580C',
+                        'primary-dark': '#C2410C',
+                        'primary-light': '#FB923C',
+                        'primary-accent': '#FFEDD5',
+                        'bg': '#F9FAFB',
                     }
+
                 }
             }
         }
@@ -29,7 +38,7 @@
 
     @stack('styles')
     <style>
-        body {
+        * {
             font-family: "Poppins", sans-serif;
         }
 
@@ -46,7 +55,7 @@
     <title>EasyRent</title>
 </head>
 
-<body class="bg-primary-pale">
+<body class="bg-bg ">
     @yield('content')
 </body>
 

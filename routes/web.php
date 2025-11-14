@@ -30,7 +30,7 @@ Route::get('/', function () {
     }
 
     // jika belum login tampilkan form login (atau view welcome jika kamu mau)
-    return view('auth.login');
+    return view('welcome');
 })->name('root');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
