@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --color-primary-main: #ea580c;
+    --color-primary-dark: #c2410c;
+    --color-primary-light: #fb923c;
+    --color-primary-accent: #ffedd5;
+    --color-bg: #f9fafb;
+}
+
+* {
+    font-family: "Poppins", sans-serif;
+}
