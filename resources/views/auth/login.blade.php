@@ -18,11 +18,21 @@
     </style>
 @endpush
 @section('content')
+    <nav id="nav"
+        class="bg-black/60 backdrop-blur-lg border-b border-primary-main/10 fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
+        <div class="flex justify-between items-center px-6 md:px-16 py-5">
+            <a href="/"
+                class="text-white font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
+                EASY<span class="text-primary-main">RENT</span>
+            </a>
+        </div>
+    </nav>
     <div class="min-h-screen flex items-center justify-center  p-4">
         <!-- Background decorative elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute top-10 right-10 w-40 h-40 bg-primary-light opacity-10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-10 left-10 w-40 h-40 bg-primary-light opacity-10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 left-10 w-40 h-40 bg-primary-light opacity-10 rounded-full blur-3xl">
+            </div>
         </div>
 
         <!-- Main container -->

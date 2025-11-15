@@ -7,11 +7,11 @@
 
         @auth
             <div class="hidden md:flex items-center space-x-1">
-                <a href="/"
+                <a href="{{ route('admin.dashboard') }}"
                     class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Home</a>
-                <a href="/rents"
+                <a href="{{ route('admin.rents.index') }}"
                     class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
-                <a href="/vehicles"
+                <a href="{{ route('admin.vehicles.index') }}"
                     class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
             </div>
         @endauth
@@ -105,9 +105,9 @@
 
     window.addEventListener('scroll', () => {
         if (window.scrollY < 150) {
-            nav.classList.remove('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+            nav.classList.remove('bg-black/60', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
         } else {
-            nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+            nav.classList.add('bg-black/60', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
         }
     });
 </script>
