@@ -35,6 +35,10 @@ class Rent extends Model
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'rent_id');
+    }
 
     public function getRentalDaysAttribute()
     {
