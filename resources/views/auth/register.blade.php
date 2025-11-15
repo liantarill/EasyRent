@@ -23,7 +23,7 @@
         <div class="relative w-full max-w-3xl">
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <!-- Header -->
-                <div class="bg-gradient-to-r from-primary-main to-primary-light px-8 py-12">
+                <div class="bg-linear-to-r from-primary-main to-primary-light px-8 py-12">
                     <h1 class="text-3xl font-bold text-white mb-2">Buat Akun Baru</h1>
                     <p class="text-primary-pale text-sm">Daftar untuk mulai menggunakan EasyRent</p>
                 </div>
@@ -92,7 +92,7 @@
 
                         <!-- Submit button -->
                         <button type="submit"
-                            class="w-full mt-8 bg-gradient-to-r from-primary-main to-primary-light text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
+                            class="w-full mt-8 bg-linear-to-r from-primary-main to-primary-light text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
                             Daftar
                         </button>
                     </form>

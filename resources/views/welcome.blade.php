@@ -1,39 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-gray-950 ">
-        {{-- Navigation --}}
-        @if (Route::has('login'))
-            <nav class="fixed top-0 right-0 left-0 z-50 px-6 md:px-12 py-6 flex justify-between items-center">
-                <div class="text-white font-black text-2xl tracking-tight">
-                    EASYRENT
-                </div>
-                <div class="flex gap-6">
-                    @auth
-                        <a href="{{ url('/home') }}"
-                            class="px-6 py-2 font-semibold text-gray-300 hover:text-primary-light transition-colors duration-300">
-                            Dashboard
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="px-6 py-2 font-semibold text-gray-300 hover:text-primary-light transition-colors duration-300">
-                            Login
-                        </a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="px-6 py-3 font-semibold bg-primary-main text-white rounded-lg hover:bg-[#C2410C] transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-primary-main/20">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </div>
-            </nav>
-        @endif
+    <div class="halo min-h-screen bg-gray-950 ">
+
+        @include('layouts.partials.navbar')
 
         <section class="relative w-full h-screen bg-cover bg-center overflow-hidden flex items-center justify-center"
             style="background-image: linear-gradient(135deg, rgba(10,10,15,0.55) 0%, rgba(234,88,12,0.15) 100%), url('/images/hero3.jpg'); background-attachment: fixed;">
 
-            <div class="absolute inset-0 bg-gradient-to-r from-gray-950 via-transparent to-gray-950 opacity-40"></div>
+            <div class="absolute inset-0 bg-linear-to-r from-gray-950 via-transparent to-gray-950 opacity-40"></div>
 
             <div class="relative z-10 flex items-center justify-start h-full max-w-7xl w-full mx-auto px-6 md:px-12">
                 <div class="max-w-3xl">
@@ -58,7 +33,7 @@
             <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
                 <div class="flex flex-col items-center gap-2">
                     <span class="text-gray-400 text-xs uppercase tracking-widest font-semibold">Scroll</span>
-                    <div class="w-[2px] h-6 bg-gradient-to-b from-primary-light to-transparent animate-pulse"></div>
+                    <div class="w-0.5 h-6 bg-linear-to-b from-primary-light to-transparent animate-pulse"></div>
                 </div>
             </div>
         </section>
@@ -70,16 +45,16 @@
                     <h2 class="text-5xl md:text-6xl font-black text-white mt-4 mb-2 tracking-tight">
                         Pelayanan Terbaik dalam Setiap Detail
                     </h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-primary-main to-primary-light mt-6"></div>
+                    <div class="w-24 h-1 bg-linear-to-r from-primary-main to-primary-light mt-6"></div>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
-                    {{-- Feature 1 --}}
                     <div
-                        class="group p-8 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
+                        class="group p-8 rounded-2xl bg-linear-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
                         <div
-                            class="w-14 h-14 bg-gradient-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                            <span class="text-2xl">✨</span>
+                            class="w-14 h-14 bg-linear-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-crown text-white text-xl"></i>
+
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-primary-light transition-colors">
                             Armada Premium</h3>
@@ -89,12 +64,11 @@
                         </p>
                     </div>
 
-                    {{-- Feature 2 --}}
                     <div
-                        class="group p-8 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
+                        class="group p-8 rounded-2xl bg-linear-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
                         <div
-                            class="w-14 h-14 bg-gradient-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                            <span class="text-2xl">🛡️</span>
+                            class="w-14 h-14 bg-linear-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-shield-halved text-white text-xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-primary-light transition-colors">
                             Perlindungan Lengkap
@@ -105,12 +79,11 @@
                         </p>
                     </div>
 
-                    {{-- Feature 3 --}}
                     <div
-                        class="group p-8 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
+                        class="group p-8 rounded-2xl bg-linear-to-br from-gray-900 to-gray-900/50 border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/10">
                         <div
-                            class="w-14 h-14 bg-gradient-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                            <span class="text-2xl">⚡</span>
+                            class="w-14 h-14 bg-linear-to-br from-primary-main to-primary-light rounded-xl mb-6 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-bolt text-white text-xl"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-primary-light transition-colors">
                             Pemesanan Tanpa Ribet
@@ -124,7 +97,6 @@
             </div>
         </section>
 
-        {{-- Vehicles Section --}}
         <section class="py-20 md:py-32 bg-gray-950 border-t border-gray-800">
             <div class="max-w-6xl mx-auto px-6 md:px-12">
                 <div class="mb-20">
@@ -132,19 +104,18 @@
                     <h2 class="text-5xl md:text-6xl font-black text-white mt-4 mb-2 tracking-tight">
                         Armada Unggulan Kami
                     </h2>
-                    <div class="w-24 h-1 bg-gradient-to-r from-primary-main to-primary-light mt-6"></div>
+                    <div class="w-24 h-1 bg-linear-to-r from-primary-main to-primary-light mt-6"></div>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8">
-                    {{-- Vehicle Card 1 --}}
                     <div
                         class="group relative bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/20">
                         <div
-                            class="relative h-72 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                            class="relative h-72 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
                             <img src="/images/sedan.jpg"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div
-                                class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60">
+                                class="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent opacity-60">
                             </div>
                         </div>
                         <div class="p-8 relative z-10">
@@ -161,15 +132,14 @@
                         </div>
                     </div>
 
-                    {{-- Vehicle Card 2 --}}
                     <div
                         class="group relative bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/20">
                         <div
-                            class="relative h-72 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                            class="relative h-72 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
                             <img src="/images/motorcycle.jpg"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div
-                                class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60">
+                                class="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent opacity-60">
                             </div>
                         </div>
                         <div class="p-8 relative z-10">
@@ -186,15 +156,14 @@
                         </div>
                     </div>
 
-                    {{-- Vehicle Card 3 --}}
                     <div
                         class="group relative bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-primary-main/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-main/20">
                         <div
-                            class="relative h-72 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
+                            class="relative h-72 bg-linear-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
                             <img src="/images/suv.jpg"
                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <div
-                                class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60">
+                                class="absolute inset-0 bg-linear-to-t from-gray-950 via-transparent to-transparent opacity-60">
                             </div>
                         </div>
                         <div class="p-8 relative z-10">
@@ -216,11 +185,9 @@
             </div>
         </section>
 
-        {{-- CTA Section --}}
         <section class="relative py-24 md:py-32 overflow-hidden">
-            {{-- Sophisticated gradient background with geometric elements --}}
-            <div class="absolute inset-0 bg-gradient-to-r from-primary-main via-primary-light to-primary-main"></div>
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary-main/10 to-transparent"></div>
+            <div class="absolute inset-0 bg-linear-to-r from-primary-main via-primary-light to-primary-main"></div>
+            <div class="absolute inset-0 bg-linear-to-b from-transparent via-primary-main/10 to-transparent"></div>
 
             <div class="relative z-10 max-w-4xl mx-auto px-6 md:px-12 text-center">
                 <h2 class="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
@@ -243,5 +210,4 @@
             </div>
         </section>
     </div>
-
 @endsection

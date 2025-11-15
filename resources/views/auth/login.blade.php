@@ -7,6 +7,13 @@
             background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("{{ asset('images/bg.jpg') }}");
             background-size: cover;
             background-position: center;
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
 @endpush
@@ -23,7 +30,7 @@
             <!-- Card -->
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <!-- Header section -->
-                <div class="bg-gradient-to-r from-primary-main to-primary-light px-8 py-12">
+                <div class="bg-linear-to-r from-primary-main to-primary-light px-8 py-12">
                     <h1 class="text-3xl font-bold text-white mb-2">Selamat Datang di EasyRent</h1>
                     <p class="text-primary-pale text-sm">Masuk ke Akun Anda Untuk Melanjutkan</p>
                 </div>
@@ -87,7 +94,7 @@
 
                         <!-- Submit button -->
                         <button type="submit"
-                            class="w-full mt-8 bg-gradient-to-r from-primary-main to-primary-light text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
+                            class="w-full mt-8 bg-linear-to-r from-primary-main to-primary-light text-white font-semibold py-3 rounded-lg hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
                             Masuk
                         </button>
                     </form>

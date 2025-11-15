@@ -1,64 +1,113 @@
-<nav class="bg-primary-main text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
+<nav id="nav" class="fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
+    <div class="flex justify-between items-center px-6 md:px-16 py-5">
+        <a href="/"
+            class="text-white font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
+            EASY<span class="text-primary-main">RENT</span>
+        </a>
 
-            <div class="flex items-center">
-                <a href="/" class="text-xl font-bold">
-                    {{ $title ?? 'EasyRent' }}
+        @auth
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="/"
+                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Home</a>
+                <a href="/rents"
+                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
+                <a href="/vehicles"
+                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+            </div>
+        @endauth
+
+        <div class="hidden md:flex items-center space-x-4">
+            @auth
+                <span class="text-gray-400 text-sm">{{ Auth::user()->name }}</span>
+                <div class="w-px h-6 bg-primary-main/20"></div>
+                <form action="/logout" method="POST" class="inline">
+                    @csrf
+                    <button
+                        class="px-4 py-2 text-gray-300 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
+                        Logout
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}"
+                    class="px-5 py-2 text-gray-300 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
+                    Login
                 </a>
-            </div>
-
-            <div class="hidden md:flex space-x-6">
-                <a href="/" class="hover:text-primary-light">Home</a>
-                <a href="/rents" class="hover:text-primary-light">Rents</a>
-                <a href="/vehicles" class="hover:text-primary-light">Vehicles</a>
-            </div>
-
-            <div class="hidden md:flex items-center space-x-4">
-                @auth
-                    <span class="text-primary-pale">Hi, {{ Auth::user()->name }}</span>
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button class="px-3 py-1 bg-primary-dark hover:bg-primary-accent text-white rounded">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="/login" class="px-3 py-1 bg-primary-dark hover:bg-primary-accent text-white rounded">
-                        Login
-                    </a>
-                @endauth
-            </div>
-            <button onclick="document.getElementById('mobileMenu').classList.toggle('hidden')"
-                class="md:hidden text-3xl text-primary-pale">
-                ☰
-            </button>
+                <a href="{{ route('register') }}"
+                    class="px-6 py-2.5 font-semibold bg-primary-main text-white rounded-lg hover:bg-primary-dark transition-all duration-300 shadow-lg hover:shadow-primary-main/40 text-sm uppercase tracking-wide">
+                    Register
+                </a>
+            @endauth
         </div>
+
+        <button id="mobileMenuBtn"
+            class="md:hidden text-white text-2xl hover:text-primary-light transition-colors duration-300">
+            {{-- ☰ --}}
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </div>
 
-    {{-- Mobile Menu --}}
-    <div id="mobileMenu" class="md:hidden hidden bg-primary-main border-t border-primary-dark">
-        <div class="px-4 py-3 space-y-2">
-            <a href="/" class="block py-2 text-primary-pale hover:text-white">Home</a>
-            <a href="/rents" class="block py-2 text-primary-pale hover:text-white">Rents</a>
-            <a href="/vehicles" class="block py-2 text-primary-pale hover:text-white">Vehicles</a>
+    <div id="mobileMenu"
+        class="md:hidden max-h-0 transform origin-top scale-y-0 opacity-0 pointer-events-none transition-all duration-300 ease-out">
+        <div class="px-6 py-6 space-y-4">
 
             @auth
-                <div class="pt-3 border-t border-primary-dark">
-                    <span class="block text-primary-pale mb-2">Hi, {{ Auth::user()->name }}</span>
+                <a href="/"
+                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Home</a>
+                <a href="/rents"
+                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Rents</a>
+                <a href="/vehicles"
+                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+
+                <div class="pt-4 mt-2 border-t border-primary-main/20">
+                    <span class="block text-gray-400 text-sm mb-4">{{ Auth::user()->name }}</span>
                     <form method="POST" action="/logout">
                         @csrf
-                        <button class="w-full py-2 bg-primary-dark hover:bg-primary-accent text-white rounded">
+                        <button
+                            class="w-full py-3 bg-primary-main hover:bg-primary-dark text-white rounded-lg transition-all duration-300 font-semibold uppercase tracking-wide text-sm">
                             Logout
                         </button>
                     </form>
                 </div>
             @else
                 <a href="/login"
-                    class="block w-full py-2 bg-primary-dark hover:bg-primary-accent rounded text-center text-white">
+                    class="block w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg text-center transition-all duration-300 font-medium uppercase tracking-wide text-sm border border-white/10">
                     Login
+                </a>
+                <a href="{{ route('register') }}"
+                    class="block w-full py-3 bg-primary-main hover:bg-primary-dark text-white rounded-lg text-center transition-all duration-300 font-semibold uppercase tracking-wide text-sm">
+                    Register
                 </a>
             @endauth
         </div>
     </div>
 </nav>
+
+<script>
+    const btn = document.getElementById('mobileMenuBtn');
+    const menu = document.getElementById('mobileMenu');
+
+    btn.addEventListener('click', () => {
+        const isOpen = menu.classList.contains('scale-y-100');
+
+        if (isOpen) {
+            // Tutup menu
+            menu.classList.remove('scale-y-100', 'opacity-100', 'pointer-events-auto', 'max-h-[500px]');
+            menu.classList.add('scale-y-0', 'opacity-0', 'pointer-events-none', 'max-h-0');
+        } else {
+            // Buka menu
+            menu.classList.remove('scale-y-0', 'opacity-0', 'pointer-events-none', 'max-h-0');
+            menu.classList.add('scale-y-100', 'opacity-100', 'pointer-events-auto', 'max-h-[500px]');
+        }
+    });
+
+
+    const nav = document.getElementById('nav');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY < 150) {
+            nav.classList.remove('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+        } else {
+            nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+        }
+    });
+</script>
