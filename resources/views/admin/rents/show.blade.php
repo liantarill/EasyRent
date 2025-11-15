@@ -13,6 +13,8 @@
         <p>Brand: {{ $rent->vehicle->brand }}</p>
     </div>
 
+    <p>Nomor Kendaraan: {{ $rent->vehicle->plate_number }}</p>
+
     <p>Rent Date: {{ $rent->rent_date }}</p>
 
     <p>Return Date: {{ $rent->return_date }}</p>
@@ -33,8 +35,8 @@
                     </option>
                 @endforeach
             </select>
+            <button type="submit">Simpan</button>
         </p>
-        <button type="submit">Simpan</button>
     </form>
     <br>
     <p>Payment Proof</p>
@@ -45,5 +47,20 @@
         @else
             Tidak ada bukti pembayaran.
         @endif
+    </p>
+
+    <p>Status Pembayaran: {{ $rent->payment?->status ?? 'Belum Dibayar' }}</p>
+
+    <form action="">
+        <p>Status Pembayaran:
+            <select name="" id="">
+                @foreach (['Pending', 'Paid', 'Failed'] as $status)
+                    <option value="{{ $status }}" @selected(old('status', $rent->payment?->status) === $status)>
+                        {{ ucfirst($status) }}
+                    </option>
+                @endforeach
+            </select>
+    </form>
+
     </p>
 @endsection
