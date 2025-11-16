@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone_number')->nullable();
-            $table->string('profile_picture')->default('profile/profile.png');
+            $table->string('profile_picture')->default('profile.png');
             $table->string('id_card_photo')->nullable();
             $table->enum('role', ['customer', 'admin'])->default('customer');
             $table->softDeletes();
