@@ -30,6 +30,15 @@ class User extends Authenticatable
         'role',
     ];
 
+    public function rents()
+    {
+        return $this->hasMany(Rent::class);
+    }
+    public function verifiedPayments()
+    {
+        return $this->hasMany(Payment::class, 'verified_by');
+    }
+
 
     // /**
     //  * The attributes that should be hidden for serialization.

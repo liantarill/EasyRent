@@ -3,7 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ProfileCompletionController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Customer;
+use App\Http\Controllers\Customer\VehicleController as CustomerVehicleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +31,7 @@ Route::get('/', function () {
     }
 
     // jika belum login tampilkan form login (atau view welcome jika kamu mau)
-    return view('auth.login');
+    return view('welcome');
 })->name('root');
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
@@ -50,10 +50,22 @@ Route::post('/profile-completion/id-card', [ProfileCompletionController::class, 
 
 Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/vehicles', [CustomerVehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/vehicles/{vehicle}', [CustomerVehicleController::class, 'show'])->name('vehicles.show');
+
+    Route::get('/rents', function () {
+        return 'Riwayat transaksi customer';
+    })->name('rents.index');
+
+    Route::get('/profile', function () {
+        return 'Profil customer';
+    })->name('profile');
 });
 
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    // tambahkan route admin lain di sini...
+    Route::resource('vehicles', App\Http\Controllers\Admin\VehicleController::class);
+    Route::resource('rents', App\Http\Controllers\Admin\RentController::class);
 });
