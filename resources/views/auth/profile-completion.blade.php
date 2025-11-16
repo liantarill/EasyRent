@@ -44,7 +44,8 @@
                             @csrf
                             <div class="text-center mb-6">
                                 <div class="inline-block mb-4">
-                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt=""
+                                    <img src="{{ asset('storage/' . ($user->profile_picture ?? 'profile/profile.png')) }}"
+                                        alt=""
                                         class="w-36 h-36 rounded-full object-cover border-4 border-primary-main ">
                                 </div>
                                 <h2 class="text-xl font-bold text-white mb-2">Profile Picture</h2>
