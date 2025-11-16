@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Customer;
+use App\Http\Controllers\Customer\VehicleController as CustomerVehicleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -45,9 +45,8 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/cars', function () {
-        return 'Daftar kendaraan untuk customer';
-    })->name('cars.index');
+    Route::get('/vehicles', [CustomerVehicleController::class, 'index'])->name('vehicles.index');
+    Route::get('/vehicles/{vehicle}', [CustomerVehicleController::class, 'show'])->name('vehicles.show');
 
     Route::get('/rents', function () {
         return 'Riwayat transaksi customer';
