@@ -43,9 +43,11 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
-Route::get('/profile-completion', [ProfileCompletionController::class, 'index'])->name('customer.profile-completion.index');
-Route::post('/profile-completion/profile-picture', [ProfileCompletionController::class, 'uploadProfilePicture'])->name('customer.profile-completion.uploadProfilePicture');
-Route::post('/profile-completion/id-card', [ProfileCompletionController::class, 'uploadIdCard'])->name('customer.profile-completion.uploadIdCard');
+Route::get('/profile-completion', [ProfileCompletionController::class, 'index'])->name('profile-completion');
+Route::post('/profile-completion/profile-picture', [ProfileCompletionController::class, 'uploadProfilePicture'])->name('profile-completion.uploadProfilePicture');
+Route::post('/profile-completion/id-card', [ProfileCompletionController::class, 'uploadIdCard'])->name('profile-completion.uploadIdCard');
+Route::get('/profile-completion/next', [ProfileCompletionController::class, 'nextPage'])->name('profile-completion.nextPage');
+Route::get('/profile-completion/complete', [ProfileCompletionController::class, 'complete'])->name('profile-completion.complete');
 
 
 Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function () {

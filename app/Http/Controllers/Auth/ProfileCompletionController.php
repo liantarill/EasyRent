@@ -11,10 +11,11 @@ class ProfileCompletionController extends Controller
 {
     public function index(Request $request)
     {
+        $user = Auth::user();
         $showKtp = session('show_ktp', false);
         $showProfilePicture = session('show_profilePicture', true);
 
-        return view('auth.profile-completion', compact('showKtp', 'showProfilePicture'));
+        return view('auth.profile-completion', compact('showKtp', 'showProfilePicture', 'user'));
     }
 
     public function uploadProfilePicture(Request $request)
@@ -30,15 +31,23 @@ class ProfileCompletionController extends Controller
                 Storage::disk('public')->delete($user->profile_picture);
             }
             $path = $request->file('profile_picture')->store('profile', 'public');
+
             $user->profile_picture = $path;
             $user->save();
         }
 
         // redirect back and set session flag to show KTP step
-        return redirect()->route('customer.profile-completion.index')
-            ->with('show_ktp', true)
-            ->with('show_profilePicture', false)
+        return redirect()
+            ->route('profile-completion')
             ->with('success', 'Profile picture uploaded.');
+    }
+
+    public function nextPage()
+    {
+        return redirect()
+            ->route('profile-completion') // halaman utama profile completion
+            ->with('show_ktp', true)
+            ->with('show_profilePicture', false);
     }
 
     public function uploadIdCard(Request $request)
@@ -58,6 +67,15 @@ class ProfileCompletionController extends Controller
             $user->save();
         }
 
-        return redirect()->intended('dashboard')->with('success', 'Selamat datang, ' . $request->user()->username . '!');
+        return redirect()
+            ->route('profile-completion')
+            ->with('show_ktp', true)
+            ->with('show_profilePicture', false)
+            ->with('success', 'ID card picture uploaded.');
+    }
+
+    public function complete()
+    {
+        return redirect()->intended('dashboard')->with('success', 'Selamat datang, ' . Auth::user()->username . '!');
     }
 }
