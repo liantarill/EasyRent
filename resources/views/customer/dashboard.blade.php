@@ -23,7 +23,7 @@
             </div>
 
             <div class="grid gap-4 md:grid-cols-2">
-                <a href="{{ route('customer.cars.index') }}"
+                <a href="{{ route('customer.vehicles.index') }}"
                     class="rounded-xl bg-gray-900 border border-gray-800 p-5 hover:border-primary-main transition">
                     <h2 class="text-lg font-semibold">Lihat Kendaraan</h2>
                     <p class="text-gray-400 text-sm mt-1">Tampilkan semua kendaraan yang tersedia.</p>

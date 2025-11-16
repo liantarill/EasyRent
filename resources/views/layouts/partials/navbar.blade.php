@@ -7,9 +7,6 @@
 
         @auth
             <div class="hidden md:flex items-center space-x-1">
-                <a href="/"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Home</a>
-
                 @if (Auth::user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}"
                         class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
@@ -20,12 +17,12 @@
                 @else
                     <a href="{{ route('customer.dashboard') }}"
                         class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
-                    <a href="{{ route('customer.cars.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Kendaraan</a>
+                    <a href="{{ route('customer.vehicles.index') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
                     <a href="{{ route('customer.rents.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Transaksi</a>
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Transactions</a>
                     <a href="{{ route('customer.profile') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Profil</a>
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Profile</a>
                 @endif
             </div>
         @endauth
@@ -65,9 +62,6 @@
         <div class="px-6 py-6 space-y-4">
 
             @auth
-                <a href="/"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Home</a>
-
                 @if (Auth::user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}"
                         class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
@@ -78,12 +72,12 @@
                 @else
                     <a href="{{ route('customer.dashboard') }}"
                         class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
-                    <a href="{{ route('customer.cars.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Kendaraan</a>
+                    <a href="{{ route('customer.vehicles.index') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
                     <a href="{{ route('customer.rents.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Transaksi</a>
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Transactions</a>
                     <a href="{{ route('customer.profile') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Profil</a>
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Profile</a>
                 @endif
 
                 <div class="pt-4 mt-2 border-t border-primary-main/20">
