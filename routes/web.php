@@ -44,6 +44,18 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/cars', function () {
+        return 'Daftar kendaraan untuk customer';
+    })->name('cars.index');
+
+    Route::get('/rents', function () {
+        return 'Riwayat transaksi customer';
+    })->name('rents.index');
+
+    Route::get('/profile', function () {
+        return 'Profil customer';
+    })->name('profile');
 });
 
 

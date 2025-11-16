@@ -9,10 +9,24 @@
             <div class="hidden md:flex items-center space-x-1">
                 <a href="/"
                     class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Home</a>
-                <a href="/rents"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
-                <a href="/vehicles"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
+                    <a href="{{ route('admin.rents.index') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
+                    <a href="{{ route('admin.vehicles.index') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+                @else
+                    <a href="{{ route('customer.dashboard') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
+                    <a href="{{ route('customer.cars.index') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Kendaraan</a>
+                    <a href="{{ route('customer.rents.index') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Transaksi</a>
+                    <a href="{{ route('customer.profile') }}"
+                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Profil</a>
+                @endif
             </div>
         @endauth
 
@@ -53,10 +67,24 @@
             @auth
                 <a href="/"
                     class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Home</a>
-                <a href="/rents"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Rents</a>
-                <a href="/vehicles"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
+                    <a href="{{ route('admin.rents.index') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Rents</a>
+                    <a href="{{ route('admin.vehicles.index') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+                @else
+                    <a href="{{ route('customer.dashboard') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
+                    <a href="{{ route('customer.cars.index') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Kendaraan</a>
+                    <a href="{{ route('customer.rents.index') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Transaksi</a>
+                    <a href="{{ route('customer.profile') }}"
+                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Profil</a>
+                @endif
 
                 <div class="pt-4 mt-2 border-t border-primary-main/20">
                     <span class="block text-gray-400 text-sm mb-4">{{ Auth::user()->name }}</span>
