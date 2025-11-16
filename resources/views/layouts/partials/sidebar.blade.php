@@ -33,16 +33,17 @@
             @endphp
 
             <a href="{{ route('admin.dashboard') ?? url('/') }}"
-                class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('dashboard*') }}">
+                class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('admin/dashboard*') }}">
                 <span class="truncate">Dashboard</span>
             </a>
 
-            <a href=""
-                class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('vehicles*') }}">
+            <a href="{{ route('admin.vehicles.index') }}"
+                class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('admin/vehicles*') }}">
                 <span class="truncate">Vehicles</span>
             </a>
 
-            <a href="" class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('rents*') }}">
+            <a href="{{ route('admin.rents.index') }}"
+                class="group flex items-center gap-3 px-3 py-2 rounded-md mb-1 {{ $isActive('admin/rents*') }}">
                 <span class="truncate">Rents</span>
             </a>
 
@@ -132,9 +133,11 @@
                 {{-- mobile nav (reuse same links) --}}
                 <nav class="space-y-1">
                     <a href="{{ route('admin.dashboard') ?? url('/') }}"
-                        class="block px-3 py-2 rounded {{ $isActive('dashboard*') }}">Dashboard</a>
-                    <a href="" class="}">Vehicles</a>
-                    <a href="" class="block px-3 py-2 rounded {{ $isActive('rents*') }}">Rents</a>
+                        class="block px-3 py-2 rounded {{ $isActive('admin/dashboard*') }}">Dashboard</a>
+                    <a href="{{ route('admin.vehicles.index') }}"
+                        class="block px-3 py-2 rounded {{ $isActive('admin/vehicles*') }}">Vehicles</a>
+                    <a href="{{ route('admin.rents.index') }}"
+                        class="block px-3 py-2 rounded {{ $isActive('admin/rents*') }}">Rents</a>
                     <a href="" class="block px-3 py-2 rounded {{ $isActive('reports*') }}">Reports</a>
                     <a href="" class="block px-3 py-2 rounded {{ $isActive('settings*') }}">Settings</a>
                 </nav>
