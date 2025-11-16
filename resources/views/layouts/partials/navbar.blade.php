@@ -122,14 +122,26 @@
         }
     });
 
-
     const nav = document.getElementById('nav');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY < 150) {
-            nav.classList.remove('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+    function handleNav() {
+        if (window.innerWidth >= 768) {
+            if (window.scrollY < 150) {
+                nav.classList.remove('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+            } else {
+                nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
+            }
         } else {
             nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
         }
-    });
+    }
+
+    // Jalankan saat scroll
+    window.addEventListener('scroll', handleNav);
+
+    // Jalankan saat resize
+    window.addEventListener('resize', handleNav);
+
+    // Jalankan sekali saat page load
+    handleNav();
 </script>

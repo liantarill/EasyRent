@@ -5,6 +5,15 @@
     <div class="min-h-screen w-full  bg-cover flex items-center justify-center p-20 relative overflow-hidden"
         style="background-image: linear-gradient(135deg, rgba(10,10,15,0.55) 0%, rgba(234,88,12,0.15) 100%), url('/images/hero3.jpg'); background-attachment: fixed;">
 
+        <nav id="nav" class="fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
+            <div class="flex justify-between items-center px-6 md:px-16 py-5">
+                <a href="/"
+                    class="text-white font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
+                    EASY<span class="text-primary-main">RENT</span>
+                </a>
+            </div>
+        </nav>
+
         <div class="relative w-full max-w-lg">
             <div
                 class="bg-linear-to-br from-gray-900 to-gray-900/50 rounded-2xl shadow-2xl overflow-hidden border border-gray-800">
