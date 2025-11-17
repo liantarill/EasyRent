@@ -3,6 +3,11 @@
 @section('content')
     @include('layouts.partials.navbar')
 
+    @php
+        $customer = auth()->user();
+        $canRent = $customer && $customer->hasCompletedProfile();
+    @endphp
+
     <div style="max-width: 720px; margin: 120px auto 60px; padding: 0 16px;">
         <a href="{{ route('customer.vehicles.index') }}" style="display: inline-block; margin-bottom: 20px; text-decoration:none;">
             &larr; Kembali ke daftar kendaraan
@@ -55,10 +60,22 @@
             <h2 style="margin-bottom: 12px;">Harga & Status</h2>
             <p style="margin: 0 0 8px;">Harga sewa per hari: <strong>{{ $vehicle->formatted_price }}</strong></p>
             <p style="margin: 0 0 12px;">Status: <strong>{{ $vehicle->status }}</strong></p>
-            <button type="button"
-                style="padding: 10px 18px; background: #222; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
-                Sewa Sekarang
-            </button>
+
+            @if ($canRent)
+                <button type="button"
+                    style="padding: 10px 18px; background: #222; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+                    Sewa Sekarang
+                </button>
+            @else
+                <div style="padding: 16px; border: 1px solid #f2c94c; border-radius: 6px; background: #fff9e6;">
+                    <p style="margin: 0 0 8px; color: #8a6d1d; font-weight: 600;">Profil Anda belum lengkap.</p>
+                    <p style="margin: 0 0 12px; color: #8a6d1d;">Lengkapi data diri sebelum melakukan peminjaman.</p>
+                    <a href="{{ route('customer.profile') }}"
+                        style="display: inline-block; padding: 8px 14px; border-radius: 5px; border: 1px solid #8a6d1d; color: #8a6d1d; text-decoration: none;">
+                        Lengkapi Profil
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 @endsection
