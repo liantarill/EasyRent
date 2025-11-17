@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ProfileCompletionController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use App\Http\Controllers\Customer\VehicleController as CustomerVehicleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,9 +61,11 @@ Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function 
         return 'Riwayat transaksi customer';
     })->name('rents.index');
 
-    Route::get('/profile', function () {
-        return 'Profil customer';
-    })->name('profile');
+    Route::get('/profile', [CustomerProfileController::class, 'show'])->name('profile');
+    Route::put('/profile', [CustomerProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/profile-picture', [CustomerProfileController::class, 'updateProfilePicture'])->name('profile.picture');
+    Route::post('/profile/id-card', [CustomerProfileController::class, 'updateIdCard'])->name('profile.id_card');
+    Route::get('/profile/id-card/view', [CustomerProfileController::class, 'viewIdCard'])->name('profile.id_card.view');
 });
 
 

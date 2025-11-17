@@ -39,6 +39,11 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class, 'verified_by');
     }
 
+    public function hasCompletedProfile(): bool
+    {
+        return filled($this->phone_number) && filled($this->profile_picture) && filled($this->id_card_photo);
+    }
+
 
     // /**
     //  * The attributes that should be hidden for serialization.
