@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -59,10 +60,12 @@ class ProfileCompletionController extends Controller
         $user = Auth::user();
 
         if ($request->hasFile('id_card_photo')) {
-            if ($user->id_card_photo && Storage::disk('public')->exists($user->id_card_photo)) {
-                Storage::disk('public')->delete($user->id_card_photo);
-            }
-            $path = $request->file('id_card_photo')->store('id_card', 'public');
+            $contents = $request->file('id_card_photo')->get();
+            $encrypted = encrypt($contents);
+
+            $path = 'secure/id_cards/' . Str::uuid() . '.enc';
+            Storage::disk('local')->put($path, $encrypted);
+
             $user->id_card_photo = $path;
             $user->save();
         }
@@ -73,6 +76,7 @@ class ProfileCompletionController extends Controller
             ->with('show_profilePicture', false)
             ->with('success', 'ID card picture uploaded.');
     }
+
 
     public function complete()
     {

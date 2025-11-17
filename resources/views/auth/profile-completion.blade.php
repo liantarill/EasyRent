@@ -100,8 +100,13 @@
                             @csrf
                             <div class="text-center mb-6">
                                 <div class="inline-block mb-4">
-                                    <img src="{{ asset('storage/' . $user->id_card_photo) }}" alt=""
-                                        class="w-64 h-32 rounded-xl object-cover border-4 border-primary-main ">
+                                    @if (str_ends_with($user->id_card_photo, '.enc'))
+                                        <img src="{{ route('customer.profile.id_card.view') }}" alt="Foto identitas"
+                                            class="w-64 h-36 rounded-xl object-cover border-4 border-primary-main ">
+                                    @else
+                                        <img src="{{ asset('images/id_card.jpg') }}" alt="Foto identitas"
+                                            class="w-64 h-36 rounded-xl object-cover border-4 border-primary-main ">
+                                    @endif
                                 </div>
                                 <h2 class="text-xl font-bold text-white mb-2">Identity Verification</h2>
                                 <p class="text-sm text-gray-400">Upload a photo of your ID or passport
