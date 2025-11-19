@@ -26,6 +26,7 @@ class RegisterController extends Controller
             'password' => 'required|min:8'
         ]);
 
+        $request['status'] = 'verify';
         $user = User::create([
             'id' => Str::uuid(),
             'username' => $request->username,
@@ -36,7 +37,8 @@ class RegisterController extends Controller
         ]);
 
         Auth::login($user);
-        $request->session()->regenerate();
-        return redirect()->route('profile-completion');
+        // $request->session()->regenerate();
+        return redirect()->route('customer.profile-completion');
+        // dd($request->all());
     }
 }

@@ -28,6 +28,7 @@ class User extends Authenticatable
         'profile_picture',
         'id_card_photo',
         'role',
+        'status'
     ];
 
     public function rents()
