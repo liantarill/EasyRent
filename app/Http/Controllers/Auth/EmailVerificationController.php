@@ -55,7 +55,7 @@ class EmailVerificationController extends Controller
         $verify->update(['status' => 'valid']);
         $verify->user->update(['status' => 'active']);
 
-        return redirect()->intended('customer.profile-completion');
+        return redirect()->intended('profile-completion');
     }
 
     public function store(Request $request)
