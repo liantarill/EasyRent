@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
     Route::post('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->name('verify.store');
     Route::get('/verify/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
+    Route::put('/verify/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
 });
 
 
