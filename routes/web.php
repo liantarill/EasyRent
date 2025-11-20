@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ProfileCompletionController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
 use App\Http\Controllers\Customer\VehicleController as CustomerVehicleController;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +46,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
+Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('forgot-password.index')->middleware('guest');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetEmail'])->name('forgot-password.sendResetEmail')->middleware('guest');
+Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.index');
+Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('reset-password.updatePassword');
 
 
 Route::middleware(['auth', 'role:customer'])->group(function () {
@@ -55,6 +61,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
 
 Route::middleware(['auth', 'role:customer', 'email.verified'])->name('customer.')->group(function () {
+
     Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile-completion', [ProfileCompletionController::class, 'index'])->name('profile-completion');

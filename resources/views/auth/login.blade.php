@@ -73,7 +73,8 @@
                                     class="w-4 h-4 bg-gray-800 border-gray-700 rounded accent-primary-main">
                                 <span class="ml-2 text-gray-400 group-hover:text-gray-300 transition">Remember me</span>
                             </label>
-                            <a href="#" class="text-primary-light hover:text-primary-main transition duration-200">
+                            <a href="{{ route('forgot-password.index') }}"
+                                class="text-primary-light hover:text-primary-main transition duration-200">
                                 Forgot password?
                             </a>
                         </div>

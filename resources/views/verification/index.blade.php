@@ -13,7 +13,7 @@
             <form action="{{ route('verify.store') }}" method="POST">
                 @csrf
 
-                <input type="hidden" name="type" value="register">
+                <input type="hidden" name="type" value="reset">
                 <button type="submit"
                     class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-lg transition-colors">
                     Send OTP

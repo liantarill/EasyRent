@@ -25,6 +25,7 @@ class CheckEmailVerification
             return $next($request);
         } else if ($user->status === 'verify') {
             return redirect()->route('verify.index');
+            dd($user);
         }
 
 
