@@ -21,7 +21,6 @@ class ResetPasswordController extends Controller
             'password' => 'required|min:8'
         ]);
 
-        // Find user by email
         $user = User::where('email', $request->email)->first();
 
         if (! $user) {

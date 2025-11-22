@@ -26,10 +26,12 @@ Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
 
-        if ($user->role === 'customer') {
-            return redirect()->route('customer.dashboard');
-        } elseif ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+        if ($user->status === 'active') {
+            if ($user->role === 'customer') {
+                return redirect()->route('customer.dashboard');
+            } elseif ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
         }
     }
 
@@ -48,15 +50,18 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('forgot-password.index')->middleware('guest');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetEmail'])->name('forgot-password.sendResetEmail')->middleware('guest');
-Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.index');
-Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('reset-password.updatePassword');
+
+Route::middleware(['email.verified:reset_password'])->group(function () {
+    Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.index');
+    Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('reset-password.updatePassword');
+});
 
 
 Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::get('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
+    Route::get('/verify/{type}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
     Route::post('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->name('verify.store');
-    Route::get('/verify/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
-    Route::put('/verify/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
+    Route::get('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
+    Route::put('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
 });
 
 

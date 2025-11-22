@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\EmailVerification;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,19 +14,35 @@ class CheckEmailVerification
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, $type = "login"): Response
     {
         $user = $request->user();
+
 
         if (! $user) {
             return redirect()->route('login');
         }
+        $uniqueId = session('verification_unique_id');
 
-        if ($user->status === 'active') {
+        $hasValidVerification = EmailVerification::where('user_id', $user->id)
+            ->where('status', 'valid')
+            ->where('unique_id', $uniqueId)
+            ->exists();
+
+        // dd($hasValidVerification);
+
+        if ($hasValidVerification) {
             return $next($request);
-        } else if ($user->status === 'verify') {
-            return redirect()->route('verify.index');
-            dd($user);
+        }
+
+        if ($type === 'reset_password') {
+            return redirect()->route('verify.index', $type);
+            // if ($user->status === 'verify') {
+            // }
+        } else {
+            if ($user->status === 'active') {
+                return $next($request);
+            }
         }
 
 

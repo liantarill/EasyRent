@@ -10,7 +10,7 @@
                 <div class="bg-red-100 text-red-700 p-2 rounded mb-4 text-center">{{ session('error') }}</div>
             @endif
 
-            <form action="{{ route('verify.update', $unique_id) }}" method="POST">
+            <form action="{{ route('verify.update', [$type, $unique_id]) }}" method="POST">
                 @csrf
                 @method('PUT')
 

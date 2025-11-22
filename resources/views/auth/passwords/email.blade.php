@@ -9,6 +9,16 @@
             @if (session('status'))
                 <div class="mb-4 p-3 bg-green-50 text-green-700 rounded">{{ session('status') }}</div>
             @endif
+            @if ($errors->any())
+                <div>
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li style="color:red;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('forgot-password.sendResetEmail') }}" class="space-y-4">
                 @csrf

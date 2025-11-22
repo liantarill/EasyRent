@@ -39,6 +39,6 @@ class RegisterController extends Controller
         Auth::login($user);
         // $request->session()->regenerate();
         return redirect()->route('customer.profile-completion');
-        // dd($request->all());
+        return redirect()->route('verify.index', $type);
     }
 }
