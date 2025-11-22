@@ -21,9 +21,10 @@ class EmailVerificationController extends Controller
 
     public function show($type, $unique_id)
     {
-        $verify = EmailVerification::where('user_id', Auth::id())
-            ->where('unique_id', $unique_id)
-            ->first();
+
+        // dd(session()->all());
+        $verify = EmailVerification::where('unique_id', $unique_id)->first();
+
 
         if (!$verify) {
             abort(404);
@@ -35,11 +36,9 @@ class EmailVerificationController extends Controller
     public function update(Request $request, $type, $unique_id)
     {
 
-        $verify = EmailVerification::where('user_id', Auth::id())
-            ->where('unique_id', $unique_id)
-            ->first();
+        $verify = EmailVerification::where('unique_id', $unique_id)->first();
 
-        // if (!$verify) abort(404);
+        if (!$verify) abort(404);
 
 
         // Check if already used or expired
@@ -57,32 +56,28 @@ class EmailVerificationController extends Controller
         $verify->update(['status' => 'valid']);
         $verify->user->update(['status' => 'active']);
 
-        // return redirect()->intended('profile-completion');
-        // if ($type === 'reset_password') {
-
         session(['verification_unique_id' => $unique_id]);
-
-        // dd($request->all(), $type, $unique_id, $verify);
-        return redirect()->route('reset-password.index');
-
-        // }
-        // else if ($type === 'register') {
-        //     return redirect()->route('customer.profile-completion');
-        // }
+        if ($type === 'reset_password') {
+            return redirect()->route('reset-password.index');
+        } else if ($type === 'register') {
+            Auth::login($verify->user);
+            return redirect()->route('profile-completion');
+        } else if ($type === 'login') {
+            Auth::login($verify->user);
+            return redirect()->route('customer.dashboard');
+        }
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'type' => 'required|in:register,reset_password',
+            // 'type' => 'required|in:register,reset_password',
+            'type' => 'required|in:register,reset_password,login',
         ]);
 
-        // if ($request->type === 'register') {
-        $user = $request->user();
-        // dd($user);
-        // } else if ($request->type === 'reset_password') {
-        // $user = User::where('email', $request->email)->first();
-        // }
+
+        $userId = session('user_id');
+        $user = $userId ? User::find($userId) : $request->user();
 
         if (!$user) {
             return back()->with('failed', 'User not found.');
@@ -99,8 +94,6 @@ class EmailVerificationController extends Controller
         ]);
 
         Mail::to($user->email)->queue(new OtpEmail($otp));
-        // if ($request->type === 'register') {
         return redirect()->route('verify.show', [$request->type, $verify->unique_id]);
-        // }
     }
 }

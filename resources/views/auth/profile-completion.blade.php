@@ -39,7 +39,7 @@
                     @endif
 
                     @if ($showProfilePicture)
-                        <form action="{{ route('customer.profile-completion.uploadProfilePicture') }}" method="POST"
+                        <form action="{{ route('profile-completion.uploadProfilePicture') }}" method="POST"
                             enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             <div class="text-center mb-6">
@@ -70,7 +70,7 @@
                             </div>
 
                             <div class="flex gap-3">
-                                <a href="{{ route('customer.profile-completion.nextPage') }}"
+                                <a href="{{ route('profile-completion.nextPage') }}"
                                     class="flex-1 text-center py-3 border-2 border-gray-700 text-gray-300 font-semibold rounded-lg hover:border-primary-main hover:text-primary-light transition duration-200">
                                     Skip
                                 </a>
@@ -95,12 +95,12 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('customer.profile-completion.uploadIdCard') }}" method="POST"
+                        <form action="{{ route('profile-completion.uploadIdCard') }}" method="POST"
                             enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             <div class="text-center mb-6">
                                 <div class="inline-block mb-4">
-                                    @if (str_ends_with($user->id_card_photo, '.enc'))
+                                    @if (str_ends_with($user?->id_card_photo, '.enc'))
                                         <img src="{{ route('customer.profile.id_card.view') }}" alt="Foto identitas"
                                             class="w-64 h-36 rounded-xl object-cover border-4 border-primary-main ">
                                     @else
@@ -133,7 +133,7 @@
 
                             <!-- Action buttons -->
                             <div class="flex gap-3">
-                                <a href="{{ route('customer.profile-completion') }}"
+                                <a href="{{ route('profile-completion') }}"
                                     class="flex-1 text-center py-3 border-2 border-gray-700 text-gray-300 font-semibold rounded-lg hover:border-primary-main hover:text-primary-light transition duration-200">
                                     Back
                                 </a>
@@ -143,7 +143,7 @@
                                 </button>
                             </div>
 
-                            <a href="{{ route('customer.profile-completion.complete') }}"
+                            <a href="{{ route('profile-completion.complete') }}"
                                 class="flex justify-center items-center w-full text-center bg-linear-to-r from-primary-main to-primary-light text-white font-bold py-3 rounded-lg hover:shadow-2xl hover:shadow-primary-main/30 transition duration-300">
                                 Done
                             </a>

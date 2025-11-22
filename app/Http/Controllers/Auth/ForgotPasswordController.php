@@ -26,12 +26,9 @@ class ForgotPasswordController extends Controller
             return back()->withErrors(['email' => 'User not found.']);
         }
 
-        Auth::login($user);
-        $type = 'reset_password';
-        // return redirect()->route('verify.index', $type);
+        session([
+            'user_id' => $user->id
+        ]);
         return redirect()->route('reset-password.index');
-
-
-        // dd($request->all());
     }
 }

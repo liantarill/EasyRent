@@ -5,12 +5,20 @@
         <div class="w-full max-w-md bg-white rounded-xl shadow p-8">
             <h2 class="text-2xl font-bold mb-2">Set a new password</h2>
             <p class="text-sm text-gray-500 mb-6">Choose a strong password you haven't used elsewhere.</p>
-
+            @if ($errors->any())
+                <div>
+                    <strong>Terjadi kesalahan:</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li style="color:red;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form method="POST" action="{{ route('reset-password.updatePassword') }}" class="space-y-4">
                 @csrf
-                @method('POST') {{-- password.update normally expects POST in Laravel's default implementation --}}
+                @method('POST')
                 {{-- <input type="hidden" name="token" value="{{ $token }}"> --}}
-
 
                 <label class="block">
                     <span class="text-sm text-gray-700">New password</span>

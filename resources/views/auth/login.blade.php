@@ -39,6 +39,12 @@
                         </div>
                     @endif
 
+                    @if (session('success'))
+                        <div class="mb-6 p-4 bg-green-500/10 border-l-4 border-green-500 text-green-400 rounded">
+                            <p class="font-semibold">Password Diperbaharui</p>
+                            <p class="text-sm">{{ session('success') }}</p>
+                        </div>
+                    @endif
                     <form method="POST" action="/login" class="space-y-5">
                         @csrf
 

@@ -26,12 +26,10 @@ Route::get('/', function () {
     if (Auth::check()) {
         $user = Auth::user();
 
-        if ($user->status === 'active') {
-            if ($user->role === 'customer') {
-                return redirect()->route('customer.dashboard');
-            } elseif ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            }
+        if ($user->role === 'customer') {
+            return redirect()->route('customer.dashboard');
+        } elseif ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
     }
 
@@ -43,38 +41,44 @@ Route::get('/login', [LoginController::class, 'index'])->name('login')->middlewa
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-
-
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 Route::get('/forgot-password', [ForgotPasswordController::class, 'index'])->name('forgot-password.index')->middleware('guest');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetEmail'])->name('forgot-password.sendResetEmail')->middleware('guest');
 
+
+// Route::get('/verify/{type}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
+// Route::post('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->name('verify.store');
+// Route::get('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
+// Route::put('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
+
+
 Route::middleware(['email.verified:reset_password'])->group(function () {
     Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.index');
     Route::post('/reset-password', [ResetPasswordController::class, 'updatePassword'])->name('reset-password.updatePassword');
 });
 
-
-Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::get('/verify/{type}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
-    Route::post('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->name('verify.store');
-    Route::get('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
-    Route::put('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
-});
-
-
-Route::middleware(['auth', 'role:customer', 'email.verified'])->name('customer.')->group(function () {
-
-    Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
-
+Route::middleware(['email.verified:register'])->group(function () {
     Route::get('/profile-completion', [ProfileCompletionController::class, 'index'])->name('profile-completion');
     Route::post('/profile-completion/profile-picture', [ProfileCompletionController::class, 'uploadProfilePicture'])->name('profile-completion.uploadProfilePicture');
     Route::post('/profile-completion/id-card', [ProfileCompletionController::class, 'uploadIdCard'])->name('profile-completion.uploadIdCard');
     Route::get('/profile-completion/next', [ProfileCompletionController::class, 'nextPage'])->name('profile-completion.nextPage');
     Route::get('/profile-completion/complete', [ProfileCompletionController::class, 'complete'])->name('profile-completion.complete');
+});
 
+
+// Route::middleware([ 'role:customer'])->group(function () {
+Route::get('/verify/{type}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'index'])->name('verify.index');
+Route::post('/verify', [App\Http\Controllers\Auth\EmailVerificationController::class, 'store'])->name('verify.store');
+Route::get('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'show'])->name('verify.show');
+Route::put('/verify/{type}/{unique_id}', [App\Http\Controllers\Auth\EmailVerificationController::class, 'update'])->name('verify.update');
+// });
+
+
+Route::middleware(['auth', 'role:customer', 'email.verified:login'])->name('customer.')->group(function () {
+
+    Route::get('/dashboard', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/vehicles', [CustomerVehicleController::class, 'index'])->name('vehicles.index');
     Route::get('/vehicles/{vehicle}', [CustomerVehicleController::class, 'show'])->name('vehicles.show');
 

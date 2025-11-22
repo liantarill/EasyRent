@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users');
             $table->string('unique_id');
             $table->string('otp');
-            $table->enum('type', ['register', 'reset_password']);
+            $table->enum('type', ['register', 'reset_password', 'login']);
             $table->enum('send_via', ['email', 'sms', 'wa']);
             $table->integer('resend')->default(0);
             $table->enum('status', ['active', 'valid', 'invalid']);
