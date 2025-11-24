@@ -21,6 +21,10 @@
     #sidebar.collapsed #sidebarExpandBtn {
         display: block !important;
     }
+
+    #sidebar.collapsed #brandText {
+        display: none !important;
+    }
 </style>
 
 <script>
@@ -142,6 +146,7 @@
 
 <script>
     const sidebar = document.getElementById('sidebar');
+    const brandtext = document.getElementById('brandText');
     const collapseBtn = document.getElementById('sidebarCollapseBtn');
     const expandBtn = document.getElementById('sidebarExpandBtn');
     const COLLAPSED_KEY = 'sidebar_collapsed';
@@ -156,6 +161,7 @@
         }
 
         collapseBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+        brandtext.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
         expandBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
         localStorage.setItem(COLLAPSED_KEY, collapsed ? '1' : '0');
     }
