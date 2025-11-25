@@ -16,8 +16,25 @@
             </div>
 
             <div style="flex: 1 1 160px;">
+                <label for="rent_date" style="display: block; font-size: 14px; margin-bottom: 4px;">Tanggal Sewa
+                    (Mulai)</label>
+                <input type="date" id="rent_date" name="rent_date" value="{{ $filters['rent_date'] ?? '' }}"
+                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+            <!-- Return Date -->
+            <div style="flex: 1 1 160px;">
+                <label for="return_date" style="display: block; font-size: 14px; margin-bottom: 4px;">Tanggal Kembali
+                    (Selesai)</label>
+                <input type="date" id="return_date" name="return_date" value="{{ $filters['return_date'] ?? '' }}"
+                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+
+
+            <div style="flex: 1 1 160px;">
                 <label for="type" style="display: block; font-size: 14px; margin-bottom: 4px;">Tipe</label>
-                <select id="type" name="type" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <select id="type" name="type"
+                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                     <option value="">Semua</option>
                     <option value="car" @selected(($filters['type'] ?? '') === 'car')>Mobil</option>
                     <option value="motorcycle" @selected(($filters['type'] ?? '') === 'motorcycle')>Motor</option>
