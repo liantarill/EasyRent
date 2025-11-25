@@ -14,15 +14,16 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('rent_id')->constrained('rents')->cascadeOnDelete();
-            $table->decimal('amount', 15, 2);
-            $table->enum('method', ['cash', 'bank_transfer', 'credit_card', 'e_wallet']);
-            $table->enum('status', ['Pending', 'Paid', 'Failed'])->default('Pending');
-            $table->string('payment_proof')->nullable();
-
-
-            $table->uuid('verified_by')->nullable();
-            $table->foreign('verified_by')->references('id')->on('users')->nullOnDelete();
+            $table->string('order_id')->unique();
+            $table->string('snap_token')->nullable();
+            $table->string('method')->default('midtrans');
+            $table->decimal('amount', 12, 2);
+            $table->enum('status', ['Pending', 'Pending Payment', 'Paid', 'Failed', 'Expired'])->default('Pending');
             $table->timestamps();
+
+            // Add index for faster queries
+            $table->index('rent_id');
+            $table->index('order_id');
         });
     }
 

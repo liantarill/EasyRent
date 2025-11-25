@@ -92,19 +92,15 @@ Route::middleware(['auth', 'role:customer', 'email.verified:login'])->name('cust
     Route::post('/profile/id-card', [CustomerProfileController::class, 'updateIdCard'])->name('profile.id_card');
     Route::get('/profile/id-card/view', [CustomerProfileController::class, 'viewIdCard'])->name('profile.id_card.view');
 
-    // Route::resource('rents', App\Http\Controllers\Customer\RentController::class);
-    Route::get('/rents/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'create'])->name('rents.create');
-    Route::post('/rents/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'store'])->name('rents.store');
+    Route::get('/rents', [App\Http\Controllers\Customer\RentController::class, 'index'])->name('rents.index');
+    Route::get('/rents/create/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'create'])->name('rents.create');
+    Route::post('/rents/create/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'store'])->name('rents.store');
+    Route::get('/rents/{rent}', [App\Http\Controllers\Customer\RentController::class, 'show'])->name('rents.show');
 
 
-    // Route::resource('payments', App\Http\Controllers\Customer\PaymentController::class);
 
-    Route::get('payments/{rent}/show', [App\Http\Controllers\Customer\PaymentController::class, 'show'])->name('payments.show');
-
-
-    Route::get('payments/{rent}/checkout', [App\Http\Controllers\Customer\PaymentController::class, 'checkout'])->name('payments.checkout');
-    Route::get('payments/{payment}/finish', [App\Http\Controllers\Customer\PaymentController::class, 'finish'])->name('payments.finish');
-    Route::get('payments/{payment}/finish', [App\Http\Controllers\Customer\PaymentController::class, 'finish'])->name('payments.finish');
+    Route::get('/payments/{rent}/checkout', [App\Http\Controllers\Customer\PaymentController::class, 'checkout'])->name('payments.checkout');
+    Route::get('/payments/{payment}/finish', [App\Http\Controllers\Customer\PaymentController::class, 'finish'])->name('payments.finish');
 });
 
 
@@ -113,3 +109,5 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::resource('vehicles', App\Http\Controllers\Admin\VehicleController::class);
     Route::resource('rents', App\Http\Controllers\Admin\RentController::class);
 });
+
+Route::post('/payment/notification', [App\Http\Controllers\Customer\PaymentController::class, 'notification'])->name('payments.notification');

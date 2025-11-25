@@ -57,4 +57,17 @@ class RentController extends Controller
 
         return redirect()->route('customer.payments.checkout', $rent->id)->with('success', 'Berhasil membuat sewa!');
     }
+
+    public function show(Rent $rent)
+    {
+        // Authorize - ensure only the rent owner can view
+        if ($rent->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Eager load relations
+        $rent->load(['vehicle', 'user', 'payment']);
+
+        return view('customer.rents.show', compact('rent'));
+    }
 }
