@@ -55,11 +55,11 @@ class RentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rent $rent)
-    {
-        $rent->load('payment');
-        return view('admin.rents.show', compact('rent'));
-    }
+    // public function show(Rent $rent)
+    // {
+    //     $rent->load('payment');
+    //     return view('admin.rents.show', compact('rent'));
+    // }
 
     /**
      * Show the form for editing the specified resource.

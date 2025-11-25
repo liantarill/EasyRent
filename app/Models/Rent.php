@@ -19,6 +19,11 @@ class Rent extends Model
         'total_price',
         'rent_status',
     ];
+    protected $casts = [
+        'rent_date' => 'date',
+        'return_date' => 'date',
+    ];
+
 
     public function user()
     {

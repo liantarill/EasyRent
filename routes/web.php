@@ -91,6 +91,20 @@ Route::middleware(['auth', 'role:customer', 'email.verified:login'])->name('cust
     Route::post('/profile/profile-picture', [CustomerProfileController::class, 'updateProfilePicture'])->name('profile.picture');
     Route::post('/profile/id-card', [CustomerProfileController::class, 'updateIdCard'])->name('profile.id_card');
     Route::get('/profile/id-card/view', [CustomerProfileController::class, 'viewIdCard'])->name('profile.id_card.view');
+
+    // Route::resource('rents', App\Http\Controllers\Customer\RentController::class);
+    Route::get('/rents/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'create'])->name('rents.create');
+    Route::post('/rents/{vehicle}', [App\Http\Controllers\Customer\RentController::class, 'store'])->name('rents.store');
+
+
+    // Route::resource('payments', App\Http\Controllers\Customer\PaymentController::class);
+
+    Route::get('payments/{rent}/show', [App\Http\Controllers\Customer\PaymentController::class, 'show'])->name('payments.show');
+
+
+    Route::get('payments/{rent}/checkout', [App\Http\Controllers\Customer\PaymentController::class, 'checkout'])->name('payments.checkout');
+    Route::get('payments/{payment}/finish', [App\Http\Controllers\Customer\PaymentController::class, 'finish'])->name('payments.finish');
+    Route::get('payments/{payment}/finish', [App\Http\Controllers\Customer\PaymentController::class, 'finish'])->name('payments.finish');
 });
 
 
