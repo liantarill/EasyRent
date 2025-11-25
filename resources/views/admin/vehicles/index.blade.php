@@ -26,45 +26,48 @@
     </style>
 @endpush
 @section('content')
-    <table>
-        <thead>
-            <th>id</th>
-            <th>brand</th>
-            <th>year</th>
-            <th>plate_number</th>
-            <th>transmission</th>
-            <th>fuel type</th>
-            <th>capacity</th>
-            <th>price per day</th>
-            <th>description</th>
-            <th>photo</th>
-            <th>vehicle type</th>
-            <th>status</th>
-            <th>aksi</th>
+    <div class="flex">
+        @include('layouts.partials.sidebar')
 
-        </thead>
-        <tbody>
-            @foreach ($vehicles as $vehicle)
-                <tr>
-                    <td>{{ $vehicle->id }}</td>
-                    <td>{{ $vehicle->brand }}</td>
-                    <td>{{ $vehicle->year }}</td>
-                    <td>{{ $vehicle->plate_number }}</td>
-                    <td>{{ $vehicle->transmission }}</td>
-                    <td>{{ $vehicle->fuel_type }}</td>
-                    <td>{{ $vehicle->capacity }}</td>
-                    <td>{{ $vehicle->price_per_day }}</td>
-                    <td>{{ $vehicle->description }}</td>
-                    <td>{{ $vehicle->photo }}</td>
-                    <td>{{ $vehicle->vehicle_type }}</td>
-                    <td>{{ $vehicle->status }}</td>
-                    <td>
-                        <a href="{{ route('admin.vehicles.edit', $vehicle->id) }}">
-                            Edit
-                        </a>
+        <table>
+            <thead>
+                <th>id</th>
+                <th>brand</th>
+                <th>year</th>
+                <th>plate_number</th>
+                <th>transmission</th>
+                <th>fuel type</th>
+                <th>capacity</th>
+                <th>price per day</th>
+                <th>description</th>
+                <th>photo</th>
+                <th>vehicle type</th>
+                <th>status</th>
+                <th>aksi</th>
 
-                        <!-- Tombol Hapus -->
-                        {{-- <form action="{{ route('staff.vehicles.destroy', $patient->id) }}" method="POST"
+            </thead>
+            <tbody>
+                @foreach ($vehicles as $vehicle)
+                    <tr>
+                        <td>{{ $vehicle->id }}</td>
+                        <td>{{ $vehicle->brand }}</td>
+                        <td>{{ $vehicle->year }}</td>
+                        <td>{{ $vehicle->plate_number }}</td>
+                        <td>{{ $vehicle->transmission }}</td>
+                        <td>{{ $vehicle->fuel_type }}</td>
+                        <td>{{ $vehicle->capacity }}</td>
+                        <td>{{ $vehicle->price_per_day }}</td>
+                        <td>{{ $vehicle->description }}</td>
+                        <td>{{ $vehicle->photo }}</td>
+                        <td>{{ $vehicle->vehicle_type }}</td>
+                        <td>{{ $vehicle->status }}</td>
+                        <td>
+                            <a href="{{ route('admin.vehicles.edit', $vehicle->id) }}">
+                                Edit
+                            </a>
+
+                            <!-- Tombol Hapus -->
+                            {{-- <form action="{{ route('staff.vehicles.destroy', $patient->id) }}" method="POST"
                             onsubmit="return confirm('Yakin ingin menghapus data kendaraan ini?')" class="inline">
                             @csrf
                             @method('DELETE')
@@ -72,9 +75,10 @@
                                 Hapus
                             </button>
                         </form> --}}
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

@@ -108,6 +108,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('vehicles', App\Http\Controllers\Admin\VehicleController::class);
     Route::resource('rents', App\Http\Controllers\Admin\RentController::class);
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class);
 });
 
 Route::post('/payment/notification', [App\Http\Controllers\Customer\PaymentController::class, 'notification'])->name('payments.notification');

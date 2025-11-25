@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    @include('layouts.partials.navbar')
+    @include('layouts.partials.sidebar')
     {{-- @include('layouts.partials.sidebar') --}}
     {{-- @if (session('success'))
         <div class="">
