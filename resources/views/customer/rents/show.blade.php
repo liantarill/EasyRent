@@ -131,7 +131,8 @@
                         @endif
                     </div>
 
-                    <form action="{{ route('customer.payments.checkout', $rent->id) }}" method="GET">
+                    <form action="{{ route('customer.payments.checkout', $rent->id, $rent->payment->snap_token) }}"
+                        method="GET">
                         <input type="hidden" name="rent_date" value="{{ $rent->rent_date->format('Y-m-d') }}">
                         <input type="hidden" name="return_date" value="{{ $rent->return_date->format('Y-m-d') }}">
 
