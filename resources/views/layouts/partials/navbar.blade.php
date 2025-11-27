@@ -1,7 +1,8 @@
-<nav id="nav" class="fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
+<nav id="nav"
+    class="bg-white/70 backdrop-blur-md border-b border-primary-main/10 fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
     <div class="flex justify-between items-center px-6 md:px-16 py-5">
-        <a href="/"
-            class="text-white font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
+        <a href="/" id="logo"
+            class=" text-black font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
             EASY<span class="text-primary-main">RENT</span>
         </a>
 
@@ -39,8 +40,8 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}"
-                    class="px-5 py-2 text-gray-300 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
+                <a href="{{ route('login') }}" id="loginBtn"
+                    class="px-5 py-2 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
                     Login
                 </a>
                 <a href="{{ route('register') }}"
@@ -51,7 +52,7 @@
         </div>
 
         <button id="mobileMenuBtn"
-            class="md:hidden text-white text-2xl hover:text-primary-light transition-colors duration-300">
+            class="md:hidden text-black text-2xl hover:text-primary-light transition-colors duration-300">
             {{-- ☰ --}}
             <i class="fa-solid fa-bars"></i>
         </button>
@@ -92,7 +93,7 @@
                 </div>
             @else
                 <a href="/login"
-                    class="block w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg text-center transition-all duration-300 font-medium uppercase tracking-wide text-sm border border-white/10">
+                    class="block w-full py-3 bg-gray-100/50 b hover:bg-gray-100/90 text-black rounded-lg text-center transition-all duration-300 font-medium uppercase tracking-wide text-sm border border-black/20">
                     Login
                 </a>
                 <a href="{{ route('register') }}"
@@ -122,26 +123,39 @@
         }
     });
 
-    const nav = document.getElementById('nav');
+    // const nav = document.getElementById('nav');
+    // const logo = document.getElementById('logo');
+    // const loginBtn = document.getElementById('loginBtn');
 
-    function handleNav() {
-        if (window.innerWidth >= 768) {
-            if (window.scrollY < 150) {
-                nav.classList.remove('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
-            } else {
-                nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
-            }
-        } else {
-            nav.classList.add('bg-black/80', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
-        }
-    }
+    // function handleNav() {
+    //     if (window.innerWidth >= 768) {
+    //         if (window.scrollY < 150) {
+    //             nav.classList.remove('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //             logo.classList.remove('text-gray-950');
+    //             logo.classList.add('text-white');
 
-    // Jalankan saat scroll
-    window.addEventListener('scroll', handleNav);
+    //             loginBtn.classList.add('text-white');
+    //             loginBtn.classList.remove('text-black');
+    //         } else {
+    //             nav.classList.add('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //             logo.classList.add('text-gray-950');
+    //             logo.classList.remove('text-white');
 
-    // Jalankan saat resize
-    window.addEventListener('resize', handleNav);
+    //             loginBtn.classList.remove('text-white');
+    //             loginBtn.classList.add('text-black');
+    //         }
+    //     } else {
+    //         nav.classList.add('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //         logo.classList.add('text-black');
+    //     }
+    // }
 
-    // Jalankan sekali saat page load
-    handleNav();
+    // // Jalankan saat scroll
+    // window.addEventListener('scroll', handleNav);
+
+    // // Jalankan saat resize
+    // window.addEventListener('resize', handleNav);
+
+    // // Jalankan sekali saat page load
+    // handleNav();
 </script>
