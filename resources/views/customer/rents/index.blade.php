@@ -1,113 +1,241 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-gray-950">
+    <div class="min-h-screen bg-white">
         @include('layouts.partials.navbar')
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 ">
-            <h2 class="text-2xl font-semibold text-white mb-6">Riwayat Penyewaan</h2>
-
-            @if ($rents->count() == 0)
-                <div class="rounded-md bg-blue-50 border border-blue-100 p-4">
-                    <p class="text-blue-800">Anda belum memiliki riwayat penyewaan.</p>
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-50 via-white to-teal-50 opacity-60"></div>
+            <div class="relative max-w-6xl mx-auto">
+                <div class="flex items-center gap-4 mb-6">
+                    <div
+                        class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
+                        <i class="fas fa-history text-white text-lg"></i>
+                    </div>
+                    <h1 class="text-sm font-bold tracking-widest uppercase text-teal-600">Riwayat Penyewaan</h1>
                 </div>
-            @else
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    @foreach ($rents as $rent)
-                        <div class="bg-white shadow-sm rounded-2xl border p-4 flex flex-col">
-                            <div class="flex items-start gap-4">
-                                {{-- Gambar kendaraan (jika tersedia) --}}
-                                <div
-                                    class="w-20 h-16 shrink-0 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                                    @if (optional($rent->vehicle)->image_url)
-                                        <img src="{{ $rent->vehicle->image_url }}" alt="{{ $rent->vehicle->name }}"
-                                            class="object-cover w-full h-full">
+                <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
+                    Kelola Semua Pesanan Rental Anda
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl font-light">
+                    Lihat status penyewaan, tracking pembayaran, dan detail kendaraan dengan mudah. Semua informasi ada di
+                    satu tempat.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="px-4 sm:px-6 lg:px-8 pb-20">
+            <div class="max-w-6xl mx-auto">
+                @if ($rents->count() == 0)
+                    <!-- Empty State -->
+                    <div class="text-center py-20">
+                        <div
+                            class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <i class="fas fa-inbox text-4xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Belum ada penyewaan</h3>
+                        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                            Mulai petualangan Anda dengan menyewa kendaraan premium kami hari ini
+                        </p>
+                        <a href="{{ route('customer.vehicles.index') }}"
+                            class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-teal-500/20 transition-all duration-300">
+                            <i class="fas fa-car"></i>
+                            Jelajahi Armada
+                        </a>
+                    </div>
+                @else
+                    <!-- Stats Bar -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+                        <div
+                            class="bg-white border border-gray-200 rounded-2xl p-6 hover:border-teal-300 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-600 text-sm font-medium mb-1">Total Penyewaan</p>
+                                    <p class="text-3xl font-black text-gray-900">{{ $rents->count() }}</p>
+                                </div>
+                                <i class="fas fa-car text-3xl text-teal-100"></i>
+                            </div>
+                        </div>
+
+                        @php
+                            $pending = $rents->filter(fn($r) => $r->rent_status === 'Pending Verification')->count();
+                            $verified = $rents->filter(fn($r) => $r->rent_status === 'Verified')->count();
+                        @endphp
+
+                        <div
+                            class="bg-white border border-gray-200 rounded-2xl p-6 hover:border-yellow-300 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-600 text-sm font-medium mb-1">Menunggu Verifikasi</p>
+                                    <p class="text-3xl font-black text-gray-900">{{ $pending }}</p>
+                                </div>
+                                <i class="fas fa-clock text-3xl text-yellow-100"></i>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white border border-gray-200 rounded-2xl p-6 hover:border-green-300 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-600 text-sm font-medium mb-1">Pesanan Diverifikasi</p>
+                                    <p class="text-3xl font-black text-gray-900">{{ $verified }}</p>
+                                </div>
+                                <i class="fas fa-check-circle text-3xl text-green-100"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rental Cards Grid -->
+                    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        @foreach ($rents as $rent)
+                            <div
+                                class="group relative bg-white rounded-2xl border border-gray-200 hover:border-teal-300 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/10">
+                                <!-- Status Badge -->
+                                @php
+                                    $status = $rent->rent_status;
+                                    $statusIcon = match ($status) {
+                                        'Pending Verification' => 'fa-hourglass-half',
+                                        'Verified' => 'fa-check-circle',
+                                        'Rejected' => 'fa-times-circle',
+                                        default => 'fa-question-circle',
+                                    };
+                                    $badgeColor = match ($status) {
+                                        'Pending Verification' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
+                                        'Verified' => 'bg-green-50 text-green-700 border-green-200',
+                                        'Rejected' => 'bg-red-50 text-red-700 border-red-200',
+                                        default => 'bg-gray-50 text-gray-700 border-gray-200',
+                                    };
+                                @endphp
+                                <div class="absolute top-4 right-4 z-10">
+                                    <span
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border {{ $badgeColor }}">
+                                        <i class="fas {{ $statusIcon }}"></i>
+                                        {{ $status }}
+                                    </span>
+                                </div>
+
+                                <!-- Vehicle Image -->
+                                <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                                    @if (optional($rent->vehicle)->photo)
+                                        <img src="{{ asset('storage/' . $rent->vehicle->photo) }}"
+                                            alt="{{ $rent->vehicle->brand }}"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                     @else
-                                        <svg class="w-8 h-8 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M3 7v10a1 1 0 001 1h3l.5-2H20a1 1 0 001-1V7a1 1 0 00-1-1H4a1 1 0 00-1 1z" />
-                                        </svg>
+                                        <div class="w-full h-full flex items-center justify-center">
+                                            <i class="fas fa-car text-5xl text-gray-300"></i>
+                                        </div>
                                     @endif
                                 </div>
 
-                                <div class="flex-1">
-                                    <h3 class="text-lg font-medium text-gray-800">
+                                <!-- Content -->
+                                <div class="p-6">
+                                    <!-- Vehicle Name -->
+                                    <h3
+                                        class="text-xl font-black text-gray-900 mb-1 group-hover:text-teal-600 transition-colors">
                                         {{ $rent->vehicle->brand ?? 'Kendaraan tidak tersedia' }}
                                     </h3>
-                                    <p class="text-sm text-gray-500 mt-1">
-                                        Rp {{ number_format($rent->daily_price_snapshot, 0, ',', '.') }} / hari
+                                    <p class="text-sm text-gray-500 mb-4 flex items-center gap-1">
+                                        <i class="fas fa-tag text-teal-500"></i>
+                                        {{ $rent->vehicle->plate_number ?? '-' }}
                                     </p>
-                                </div>
-                            </div>
 
-                            <div class="mt-4 flex-1">
-                                <dl class="text-sm text-gray-600 space-y-2">
-                                    <div class="flex items-center justify-between">
-                                        <dt class="text-xs text-gray-500">Tanggal Sewa</dt>
-                                        <dd class="font-medium text-gray-800">
-                                            {{ \Carbon\Carbon::parse($rent->rent_date)->format('d M Y') }}</dd>
+                                    <!-- Rental Details -->
+                                    <div class="space-y-3 mb-6 text-sm">
+                                        <div class="flex items-center justify-between text-gray-600">
+                                            <span class="flex items-center gap-2">
+                                                <i class="fas fa-calendar-alt text-teal-500 w-4"></i>
+                                                Mulai
+                                            </span>
+                                            <span class="font-semibold text-gray-900">
+                                                {{ \Carbon\Carbon::parse($rent->rent_date)->format('d M Y') }}
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between text-gray-600">
+                                            <span class="flex items-center gap-2">
+                                                <i class="fas fa-calendar-check text-teal-500 w-4"></i>
+                                                Kembali
+                                            </span>
+                                            <span class="font-semibold text-gray-900">
+                                                {{ \Carbon\Carbon::parse($rent->return_date)->format('d M Y') }}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt class="text-xs text-gray-500">Tanggal Kembali</dt>
-                                        <dd class="font-medium text-gray-800">
-                                            {{ \Carbon\Carbon::parse($rent->return_date)->format('d M Y') }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt class="text-xs text-gray-500">Total</dt>
-                                        <dd class="font-semibold text-gray-900">Rp
-                                            {{ number_format($rent->total_price, 0, ',', '.') }}</dd>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <dt class="text-xs text-gray-500">Pembayaran</dt>
-                                        <dd>
-                                            @if ($rent->payment)
-                                                <span
-                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Sudah
-                                                    bayar</span>
-                                            @else
-                                                <span
-                                                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Belum
-                                                    bayar</span>
-                                            @endif
-                                        </dd>
-                                    </div>
-                                </dl>
-                            </div>
 
-                            <div class="mt-4 flex items-center justify-between">
-                                {{-- Status badge --}}
-                                @php
-                                    $status = $rent->rent_status;
-                                    $statusClasses = [
-                                        'Pending Verification' => 'bg-yellow-100 text-yellow-800',
-                                        'Verified' => 'bg-green-100 text-green-800',
-                                        'Rejected' => 'bg-red-100 text-red-800',
-                                    ];
-                                    $badgeClass = $statusClasses[$status] ?? 'bg-gray-100 text-gray-800';
-                                @endphp
+                                    <!-- Price Section -->
+                                    <div class="border-t border-gray-200 pt-4 mb-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-gray-600 text-sm">Harga Per Hari</span>
+                                            <span class="font-bold text-teal-600">
+                                                Rp {{ number_format($rent->daily_price_snapshot, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-semibold text-gray-900">Total</span>
+                                            <span class="text-2xl font-black text-gray-900">
+                                                Rp {{ number_format($rent->total_price, 0, ',', '.') }}
+                                            </span>
+                                        </div>
+                                    </div>
 
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $badgeClass }}">
-                                    {{ $status }}
-                                </span>
+                                    <!-- Payment Status -->
+                                    <div class="mb-4">
+                                        @if ($rent->payment)
+                                            @php
+                                                $paymentStatus = strtolower($rent->payment->status);
+                                                $paymentBadge = match (true) {
+                                                    $paymentStatus === 'paid' => [
+                                                        'bg-green-50',
+                                                        'text-green-700',
+                                                        'icon' => 'fa-check',
+                                                        'label' => 'Pembayaran Lunas',
+                                                    ],
+                                                    in_array($paymentStatus, ['pending', 'pending payment']) => [
+                                                        'bg-yellow-50',
+                                                        'text-yellow-700',
+                                                        'icon' => 'fa-clock',
+                                                        'label' => 'Pembayaran Tertunda',
+                                                    ],
+                                                    default => [
+                                                        'bg-red-50',
+                                                        'text-red-700',
+                                                        'icon' => 'fa-times',
+                                                        'label' => 'Pembayaran Gagal',
+                                                    ],
+                                                };
+                                            @endphp
+                                            <div
+                                                class="{{ $paymentBadge[0] }} {{ $paymentBadge[1] }} rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-semibold">
+                                                <i class="fas {{ $paymentBadge['icon'] }}"></i>
+                                                {{ $paymentBadge['label'] }}
+                                            </div>
+                                        @else
+                                            <div
+                                                class="bg-gray-50 text-gray-700 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-semibold">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                                Belum Dibayar
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                <div class="flex items-center gap-2">
+                                    <!-- Action Button -->
                                     <a href="{{ route('customer.rents.show', $rent->id) }}"
-                                        class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium border border-transparent shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Detail
+                                        class="block w-full text-center px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 group-hover:translate-y-0.5">
+                                        <i class="fas fa-arrow-right mr-2"></i>
+                                        Lihat Detail
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
 
-                {{-- Pagination --}}
-                <div class="mt-8">
-                    {{ $rents->links() }}
-                </div>
-            @endif
-        </div>
+                    <!-- Pagination -->
+                    <div class="mt-12">
+                        {{ $rents->links('pagination::tailwind') }}
+                    </div>
+                @endif
+            </div>
+        </section>
     </div>
 @endsection

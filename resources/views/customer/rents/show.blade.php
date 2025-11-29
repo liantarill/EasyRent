@@ -1,188 +1,332 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-4xl mx-auto p-6">
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+    <div class="min-h-screen bg-white">
+        @include('layouts.partials.navbar')
 
-        @if (session('info'))
-            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
-                {{ session('info') }}
-            </div>
-        @endif
-
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex items-start gap-6">
-                <div class="w-40 h-28 bg-gray-100 rounded overflow-hidden flex-shrink-0">
-                    @if ($rent->vehicle->photo)
-                        <img src="{{ asset('storage/' . $rent->vehicle->photo) }}" alt="{{ $rent->vehicle->brand }}"
-                            class="w-full h-full object-cover">
-                    @else
-                        <div class="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
-                    @endif
-                </div>
-
-                <div class="flex-1">
-                    <h2 class="text-2xl font-semibold">{{ $rent->vehicle->brand ?? 'Vehicle' }}</h2>
-                    <p class="text-sm text-gray-500">{{ $rent->vehicle->plate_number ?? '-' }} •
-                        {{ $rent->vehicle->transmission ?? '' }}</p>
-
-                    <div class="mt-4 grid grid-cols-2 gap-3 text-sm text-gray-700">
-                        <div><strong>Rent Date</strong><br>{{ $rent->rent_date->format('d M Y') }}</div>
-                        <div><strong>Return Date</strong><br>{{ $rent->return_date->format('d M Y') }}</div>
-
-                        <div><strong>Daily Price</strong><br>Rp
-                            {{ number_format($rent->daily_price_snapshot, 0, ',', '.') }}</div>
-                        <div><strong>Total Price</strong><br>Rp {{ number_format($rent->total_price, 0, ',', '.') }}</div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
+            <!-- Success Messages -->
+            @if (session('success'))
+                <div
+                    class="mb-6 flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-300 rounded-xl p-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle text-2xl text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-green-900">{{ session('success') }}</p>
                     </div>
                 </div>
+            @endif
 
-                <div class="w-48 text-right flex-shrink-0">
-                    <div class="mb-3">
-                        <span
-                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold
-                        @if ($rent->rent_status === 'Verified') bg-green-100 text-green-700
-                        @elseif($rent->rent_status === 'Rejected') bg-red-100 text-red-700
-                        @else bg-yellow-100 text-yellow-700 @endif">
-                            {{ $rent->rent_status }}
-                        </span>
+            @if (session('info'))
+                <div
+                    class="mb-6 flex items-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-300 rounded-xl p-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-2xl text-blue-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-blue-900">{{ session('info') }}</p>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Header Section -->
+            <div class="mb-8">
+                <a href="{{ route('customer.rents.index') }}"
+                    class="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold mb-6 transition-colors">
+                    <i class="fas fa-chevron-left"></i>
+                    Kembali ke Daftar Penyewaan
+                </a>
+
+                <div class="flex items-start justify-between gap-6 mb-8">
+                    <div>
+                        <h1 class="text-5xl font-black text-gray-900 mb-2">
+                            {{ $rent->vehicle->brand ?? 'Kendaraan' }}
+                        </h1>
+                        <p class="text-lg text-gray-600 flex items-center gap-2">
+                            <i class="fas fa-tag text-teal-500"></i>
+                            {{ $rent->vehicle->plate_number ?? '-' }}
+                        </p>
                     </div>
 
-                    {{-- Payment status --}}
-                    @if ($rent->payment)
-                        <div class="text-sm">
-                            <div><strong>Payment:</strong></div>
-                            <div class="text-xs text-gray-500">{{ $rent->payment->method }}</div>
-                            <div class="mt-1">
-                                @php
-                                    $paymentStatus = strtolower($rent->payment->status);
-                                @endphp
-                                @if ($paymentStatus === 'paid')
-                                    <span
-                                        class="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-                                        Paid
-                                    </span>
-                                @elseif(in_array($paymentStatus, ['pending', 'pending payment']))
-                                    <span
-                                        class="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
-                                        {{ ucfirst($rent->payment->status) }}
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-                                        {{ ucfirst($rent->payment->status) }}
-                                    </span>
-                                @endif
+                    <!-- Status Badge -->
+                    @php
+                        $status = $rent->rent_status;
+                        $badgeColors = [
+                            'Pending Verification' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
+                            'Verified' => 'bg-green-100 text-green-800 border-green-300',
+                            'Rejected' => 'bg-red-100 text-red-800 border-red-300',
+                        ];
+                        $badgeClass = $badgeColors[$status] ?? 'bg-gray-100 text-gray-800 border-gray-300';
+                    @endphp
+                    <div class="border {{ $badgeClass }} rounded-2xl px-6 py-4">
+                        <p class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Status Penyewaan</p>
+                        <p class="text-2xl font-black">{{ $status }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Column: Vehicle & Details -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Vehicle Image -->
+                    <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 h-96">
+                        @if ($rent->vehicle->photo)
+                            <img src="{{ asset('storage/' . $rent->vehicle->photo) }}" alt="{{ $rent->vehicle->brand }}"
+                                class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center">
+                                <i class="fas fa-car text-8xl text-gray-300"></i>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Rental Timeline -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                        <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                            <i class="fas fa-calendar-alt text-teal-500"></i>
+                            Timeline Penyewaan
+                        </h2>
+
+                        <div class="space-y-6">
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-bold">
+                                        1
+                                    </div>
+                                    <div class="w-1 h-12 bg-gray-200 my-2"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="text-sm font-bold uppercase tracking-widest text-gray-600 mb-1">Tanggal Mulai
+                                    </p>
+                                    <p class="text-2xl font-black text-gray-900">{{ $rent->rent_date->format('d M Y') }}</p>
+                                    <p class="text-gray-600 mt-1">Pengambilan kendaraan</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
+                                        2
+                                    </div>
+                                    <div class="w-1 h-12 bg-gray-200 my-2"></div>
+                                </div>
+                                <div class="pb-6">
+                                    <p class="text-sm font-bold uppercase tracking-widest text-gray-600 mb-1">Tanggal
+                                        Kembali</p>
+                                    <p class="text-2xl font-black text-gray-900">{{ $rent->return_date->format('d M Y') }}
+                                    </p>
+                                    <p class="text-gray-600 mt-1">Pengembalian kendaraan</p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold uppercase tracking-widest text-gray-600 mb-1">Durasi
+                                        Penyewaan</p>
+                                    <p class="text-2xl font-black text-gray-900">
+                                        {{ $rent->return_date->diffInDays($rent->rent_date) }} Hari</p>
+                                </div>
                             </div>
                         </div>
-                    @endif
-                </div>
-            </div>
+                    </div>
 
-            <hr class="my-6">
+                    <!-- Vehicle Specs -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                        <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                            <i class="fas fa-info-circle text-teal-500"></i>
+                            Spesifikasi Kendaraan
+                        </h2>
 
-            {{-- Action area --}}
-            @php
-                $hasPaid = $rent->payment && strtolower($rent->payment->status) === 'paid';
-                $hasPending =
-                    $rent->payment && in_array(strtolower($rent->payment->status), ['pending', 'pending payment']);
-                $hasFailed = $rent->payment && in_array(strtolower($rent->payment->status), ['failed', 'expired']);
-            @endphp
-
-            @if ($hasPaid)
-                <div class="bg-green-50 border border-green-200 rounded p-4">
-                    <div class="flex items-center gap-3">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <div>
-                            <div class="text-green-700 font-semibold">Payment Completed</div>
-                            <div class="text-green-600 text-sm">Thank you for your payment!</div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-100">
+                                <p class="text-xs font-bold uppercase text-teal-600 mb-1">Jenis Kendaraan</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->vehicle_type ?? '-' }}</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+                                <p class="text-xs font-bold uppercase text-blue-600 mb-1">Transmisi</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->transmission ?? '-' }}</p>
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                                <p class="text-xs font-bold uppercase text-purple-600 mb-1">Bahan Bakar</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->fuel_type ?? '-' }}</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-100">
+                                <p class="text-xs font-bold uppercase text-orange-600 mb-1">Kapasitas</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->capacity ?? '-' }} Penumpang
+                                </p>
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                                <p class="text-xs font-bold uppercase text-green-600 mb-1">Status</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->status ?? '-' }}</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-4 border border-gray-200">
+                                <p class="text-xs font-bold uppercase text-gray-600 mb-1">Tahun</p>
+                                <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->year ?? '-' }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            @else
-                <div class="flex items-center justify-between">
-                    <div class="text-sm text-gray-600">
-                        @if ($hasPending)
-                            <div class="mb-2">
-                                <span class="font-semibold">Payment Pending</span><br>
-                                Complete your payment to confirm the rental.
+
+                <!-- Right Column: Pricing & Payment -->
+                <div class="lg:col-span-1">
+                    <!-- Price Summary -->
+                    <div class="bg-white border border-gray-200 rounded-2xl p-6 sticky top-24">
+                        <h2 class="text-2xl font-black text-gray-900 mb-6 flex items-center gap-3">
+                            <i class="fas fa-receipt text-teal-500"></i>
+                            Detail Harga
+                        </h2>
+
+                        <div class="space-y-4 mb-6 pb-6 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <i class="fas fa-tag text-gray-400 w-4"></i>
+                                    Harga Per Hari
+                                </span>
+                                <span class="font-bold text-gray-900">Rp
+                                    {{ number_format($rent->daily_price_snapshot, 0, ',', '.') }}</span>
                             </div>
-                        @elseif($hasFailed)
-                            <div class="mb-2">
-                                <span class="font-semibold text-red-600">Payment
-                                    {{ ucfirst($rent->payment->status) }}</span><br>
-                                Please try again to complete your rental.
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600 flex items-center gap-2">
+                                    <i class="fas fa-calendar-alt text-gray-400 w-4"></i>
+                                    Jumlah Hari
+                                </span>
+                                <span
+                                    class="font-bold text-gray-900">{{ $rent->return_date->diffInDays($rent->rent_date) }}
+                                    Hari</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="text-lg font-bold text-gray-900">Total Harga</span>
+                            <span
+                                class="text-3xl font-black bg-gradient-to-r from-teal-600 to-teal-500 bg-clip-text text-transparent">
+                                Rp {{ number_format($rent->total_price, 0, ',', '.') }}
+                            </span>
+                        </div>
+
+                        <!-- Payment Status -->
+                        @php
+                            $hasPaid = $rent->payment && strtolower($rent->payment->status) === 'paid';
+                            $hasPending =
+                                $rent->payment &&
+                                in_array(strtolower($rent->payment->status), ['pending', 'pending payment']);
+                            $hasFailed =
+                                $rent->payment && in_array(strtolower($rent->payment->status), ['failed', 'expired']);
+                        @endphp
+
+                        @if ($hasPaid)
+                            <div
+                                class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-4 mb-6">
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-check text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-green-900">Pembayaran Berhasil</p>
+                                        <p class="text-sm text-green-700 mt-1">Pesanan Anda telah dikonfirmasi</p>
+                                    </div>
+                                </div>
                             </div>
                         @else
-                            <div class="mb-2">
-                                <span class="font-semibold">Payment Required</span><br>
-                                Complete payment to confirm your rental.
+                            <div
+                                class="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
+                                <div class="flex items-start gap-3 mb-4">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                        <i class="fas fa-exclamation text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-amber-900">
+                                            @if ($hasPending)
+                                                Pembayaran Tertunda
+                                            @elseif($hasFailed)
+                                                Pembayaran Gagal
+                                            @else
+                                                Pembayaran Diperlukan
+                                            @endif
+                                        </p>
+                                        <p class="text-sm text-amber-700 mt-1">
+                                            @if ($hasPending)
+                                                Selesaikan pembayaran untuk mengkonfirmasi pesanan
+                                            @elseif($hasFailed)
+                                                Coba pembayaran lagi
+                                            @else
+                                                Lanjutkan pembayaran untuk mengkonfirmasi
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <form action="{{ route('customer.payments.checkout', $rent->id) }}" method="GET"
+                                    class="space-y-2">
+                                    <button type="submit"
+                                        class="w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 flex items-center justify-center gap-2">
+                                        <i class="fas fa-credit-card"></i>
+                                        @if ($hasPending || $hasFailed)
+                                            Coba Pembayaran Lagi
+                                        @else
+                                            Bayar Sekarang
+                                        @endif
+                                    </button>
+                                </form>
+
+                                @if ($rent->payment)
+                                    <p class="text-xs text-gray-500 mt-3 text-center">
+                                        Order ID: <code
+                                            class="bg-white px-2 py-1 rounded">{{ $rent->payment->order_id }}</code>
+                                    </p>
+                                @endif
                             </div>
                         @endif
 
+                        <!-- Payment Details -->
                         @if ($rent->payment)
-                            <div class="text-xs text-gray-400">Order ID: {{ $rent->payment->order_id }}</div>
-                        @endif
-                    </div>
-
-                    <form action="{{ route('customer.payments.checkout', $rent->id, $rent->payment->snap_token) }}"
-                        method="GET">
-                        <input type="hidden" name="rent_date" value="{{ $rent->rent_date->format('Y-m-d') }}">
-                        <input type="hidden" name="return_date" value="{{ $rent->return_date->format('Y-m-d') }}">
-
-                        <button type="submit"
-                            class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold transition">
-                            @if ($hasPending || $hasFailed)
-                                Retry Payment
-                            @else
-                                Pay Now
-                            @endif
-                        </button>
-                    </form>
-                </div>
-            @endif
-
-            {{-- Payment details --}}
-            @if ($rent->payment)
-                <div class="mt-6 bg-gray-50 p-4 rounded">
-                    <div class="text-sm font-semibold mb-2">Payment Details</div>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <div class="text-gray-600">Order ID:</div>
-                        <div class="font-mono text-xs">{{ $rent->payment->order_id }}</div>
-
-                        <div class="text-gray-600">Amount:</div>
-                        <div>Rp {{ number_format($rent->payment->amount, 0, ',', '.') }}</div>
-
-                        <div class="text-gray-600">Method:</div>
-                        <div>{{ ucfirst($rent->payment->method) }}</div>
-
-                        <div class="text-gray-600">Status:</div>
-                        <div>{{ ucfirst($rent->payment->status) }}</div>
-
-                        @if ($rent->payment->updated_at)
-                            <div class="text-gray-600">Last Updated:</div>
-                            <div>{{ $rent->payment->updated_at->format('d M Y H:i') }}</div>
+                            <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                <p class="text-xs font-bold uppercase text-gray-600 mb-3">Rincian Pembayaran</p>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600 flex items-center gap-2">
+                                            <i class="fas fa-id-card text-gray-400 w-4"></i>
+                                            Order ID
+                                        </span>
+                                        <code
+                                            class="text-xs text-gray-900 bg-white px-2 py-1 rounded">{{ $rent->payment->order_id }}</code>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600 flex items-center gap-2">
+                                            <i class="fas fa-money-bill text-gray-400 w-4"></i>
+                                            Metode
+                                        </span>
+                                        <span
+                                            class="text-gray-900 font-semibold">{{ ucfirst($rent->payment->method) }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-gray-600 flex items-center gap-2">
+                                            <i class="fas fa-clock text-gray-400 w-4"></i>
+                                            Update Terakhir
+                                        </span>
+                                        <span
+                                            class="text-gray-900 font-semibold text-xs">{{ $rent->payment->updated_at->format('d M H:i') }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
-            @endif
-        </div>
-
-        {{-- Back button --}}
-        <div class="mt-4">
-            <a href="{{ route('customer.rents.index') }}"
-                class="inline-flex items-center text-indigo-600 hover:text-indigo-800">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Back to My Rentals
-            </a>
+            </div>
         </div>
     </div>
 @endsection
