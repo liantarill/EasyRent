@@ -6,11 +6,11 @@
 
         <!-- Hero Section -->
         <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-teal-50 via-white to-teal-50 opacity-60"></div>
+            <div class="absolute inset-0 bg-linear-to-br from-teal-50 via-white to-teal-50 opacity-60"></div>
             <div class="relative max-w-6xl mx-auto">
                 <div class="flex items-center gap-4 mb-6">
                     <div
-                        class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center">
+                        class="w-12 h-12 rounded-full bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center">
                         <i class="fas fa-history text-white text-lg"></i>
                     </div>
                     <h1 class="text-sm font-bold tracking-widest uppercase text-teal-600">Riwayat Penyewaan</h1>
@@ -32,7 +32,7 @@
                     <!-- Empty State -->
                     <div class="text-center py-20">
                         <div
-                            class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            class="w-20 h-20 mx-auto mb-6 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <i class="fas fa-inbox text-4xl text-gray-400"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">Belum ada penyewaan</h3>
@@ -40,7 +40,7 @@
                             Mulai petualangan Anda dengan menyewa kendaraan premium kami hari ini
                         </p>
                         <a href="{{ route('customer.vehicles.index') }}"
-                            class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-teal-500/20 transition-all duration-300">
+                            class="inline-flex items-center gap-2 px-8 py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-teal-500/20 transition-all duration-300">
                             <i class="fas fa-car"></i>
                             Jelajahi Armada
                         </a>
@@ -117,7 +117,7 @@
                                 </div>
 
                                 <!-- Vehicle Image -->
-                                <div class="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                                <div class="relative h-48 bg-linear-to-br from-gray-100 to-gray-200 overflow-hidden">
                                     @if (optional($rent->vehicle)->photo)
                                         <img src="{{ asset('storage/' . $rent->vehicle->photo) }}"
                                             alt="{{ $rent->vehicle->brand }}"
@@ -221,7 +221,7 @@
 
                                     <!-- Action Button -->
                                     <a href="{{ route('customer.rents.show', $rent->id) }}"
-                                        class="block w-full text-center px-4 py-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 group-hover:translate-y-0.5">
+                                        class="block w-full text-center px-4 py-3 bg-linear-to-r from-teal-500 to-teal-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 group-hover:translate-y-0.5">
                                         <i class="fas fa-arrow-right mr-2"></i>
                                         Lihat Detail
                                     </a>

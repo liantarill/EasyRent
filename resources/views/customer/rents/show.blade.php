@@ -8,8 +8,8 @@
             <!-- Success Messages -->
             @if (session('success'))
                 <div
-                    class="mb-6 flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-300 rounded-xl p-4">
-                    <div class="flex-shrink-0">
+                    class="mb-6 flex items-center gap-3 bg-linear-to-r from-green-50 to-emerald-50 border border-green-300 rounded-xl p-4">
+                    <div class="shrink-0">
                         <i class="fas fa-check-circle text-2xl text-green-600"></i>
                     </div>
                     <div>
@@ -20,8 +20,8 @@
 
             @if (session('info'))
                 <div
-                    class="mb-6 flex items-center gap-3 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-300 rounded-xl p-4">
-                    <div class="flex-shrink-0">
+                    class="mb-6 flex items-center gap-3 bg-linear-to-r from-blue-50 to-cyan-50 border border-blue-300 rounded-xl p-4">
+                    <div class="shrink-0">
                         <i class="fas fa-info-circle text-2xl text-blue-600"></i>
                     </div>
                     <div>
@@ -71,7 +71,7 @@
                 <!-- Left Column: Vehicle & Details -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Vehicle Image -->
-                    <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 h-96">
+                    <div class="relative rounded-2xl overflow-hidden bg-linear-to-br from-gray-100 to-gray-200 h-96">
                         @if ($rent->vehicle->photo)
                             <img src="{{ asset('storage/' . $rent->vehicle->photo) }}" alt="{{ $rent->vehicle->brand }}"
                                 class="w-full h-full object-cover">
@@ -93,7 +93,7 @@
                             <div class="flex gap-4">
                                 <div class="flex flex-col items-center">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-bold">
+                                        class="w-12 h-12 rounded-full bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center text-white font-bold">
                                         1
                                     </div>
                                     <div class="w-1 h-12 bg-gray-200 my-2"></div>
@@ -109,7 +109,7 @@
                             <div class="flex gap-4">
                                 <div class="flex flex-col items-center">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
+                                        class="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
                                         2
                                     </div>
                                     <div class="w-1 h-12 bg-gray-200 my-2"></div>
@@ -126,7 +126,7 @@
                             <div class="flex gap-4">
                                 <div class="flex flex-col items-center">
                                     <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold">
+                                        class="w-12 h-12 rounded-full bg-linear-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold">
                                         <i class="fas fa-check"></i>
                                     </div>
                                 </div>
@@ -148,30 +148,28 @@
                         </h2>
 
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            <div class="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-100">
+                            <div class="bg-linear-to-br from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-100">
                                 <p class="text-xs font-bold uppercase text-teal-600 mb-1">Jenis Kendaraan</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->vehicle_type ?? '-' }}</p>
                             </div>
-                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+                            <div class="bg-linear-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
                                 <p class="text-xs font-bold uppercase text-blue-600 mb-1">Transmisi</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->transmission ?? '-' }}</p>
                             </div>
-                            <div
-                                class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
+                            <div class="bg-linear-to-br from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-100">
                                 <p class="text-xs font-bold uppercase text-purple-600 mb-1">Bahan Bakar</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->fuel_type ?? '-' }}</p>
                             </div>
-                            <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-100">
+                            <div class="bg-linear-to-br from-orange-50 to-red-50 rounded-xl p-4 border border-orange-100">
                                 <p class="text-xs font-bold uppercase text-orange-600 mb-1">Kapasitas</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->capacity ?? '-' }} Penumpang
                                 </p>
                             </div>
-                            <div
-                                class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                            <div class="bg-linear-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
                                 <p class="text-xs font-bold uppercase text-green-600 mb-1">Status</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->status ?? '-' }}</p>
                             </div>
-                            <div class="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-4 border border-gray-200">
+                            <div class="bg-linear-to-br from-gray-50 to-slate-50 rounded-xl p-4 border border-gray-200">
                                 <p class="text-xs font-bold uppercase text-gray-600 mb-1">Tahun</p>
                                 <p class="text-lg font-bold text-gray-900">{{ $rent->vehicle->year ?? '-' }}</p>
                             </div>
@@ -211,7 +209,7 @@
                         <div class="flex items-center justify-between mb-6">
                             <span class="text-lg font-bold text-gray-900">Total Harga</span>
                             <span
-                                class="text-3xl font-black bg-gradient-to-r from-teal-600 to-teal-500 bg-clip-text text-transparent">
+                                class="text-3xl font-black bg-linear-to-r from-teal-600 to-teal-500 bg-clip-text text-transparent">
                                 Rp {{ number_format($rent->total_price, 0, ',', '.') }}
                             </span>
                         </div>
@@ -228,10 +226,10 @@
 
                         @if ($hasPaid)
                             <div
-                                class="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-4 mb-6">
+                                class="bg-linear-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-4 mb-6">
                                 <div class="flex items-start gap-3">
                                     <div
-                                        class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                        class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white shrink-0 mt-0.5">
                                         <i class="fas fa-check text-sm"></i>
                                     </div>
                                     <div>
@@ -242,10 +240,10 @@
                             </div>
                         @else
                             <div
-                                class="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
+                                class="bg-linear-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
                                 <div class="flex items-start gap-3 mb-4">
                                     <div
-                                        class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                                        class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-white shrink-0 mt-0.5">
                                         <i class="fas fa-exclamation text-sm"></i>
                                     </div>
                                     <div>
@@ -273,7 +271,7 @@
                                 <form action="{{ route('customer.payments.checkout', $rent->id) }}" method="GET"
                                     class="space-y-2">
                                     <button type="submit"
-                                        class="w-full px-4 py-3 bg-gradient-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 flex items-center justify-center gap-2">
+                                        class="w-full px-4 py-3 bg-linear-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 flex items-center justify-center gap-2">
                                         <i class="fas fa-credit-card"></i>
                                         @if ($hasPending || $hasFailed)
                                             Coba Pembayaran Lagi
