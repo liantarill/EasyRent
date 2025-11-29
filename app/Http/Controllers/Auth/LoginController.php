@@ -22,8 +22,6 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-
-
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -42,8 +40,7 @@ class LoginController extends Controller
             return redirect()->route('verify.index', ['register'])
                 ->with('success', 'Selamat datang, ' . $user->username . '!');
         }
-
-        return back()->with('failed', 'Username atau Password Salah');
+        return back()->withInput($request->only('email'))->with('failed', 'Username atau Password Salah');
     }
 
     public function logout(Request $request)

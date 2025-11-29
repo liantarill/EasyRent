@@ -23,3 +23,8 @@
 * {
     font-family: "Poppins", sans-serif;
 }
+
+.glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(4px);
+}

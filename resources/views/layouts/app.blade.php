@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite('resources/css/app.css')
-
     @stack('styles')
 
     <title>EasyRent</title>
@@ -15,6 +14,7 @@
 
 <body class="bg-bg ">
     @yield('content')
+    @stack('scripts')
 </body>
 
 </html>

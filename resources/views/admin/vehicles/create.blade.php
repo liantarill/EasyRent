@@ -12,9 +12,8 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.vehicles.store') }}" method="POST">
+    <form action="{{ route('admin.vehicles.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-
         <label>Brand</label>
         <input type="text" name="brand"><br>
 
