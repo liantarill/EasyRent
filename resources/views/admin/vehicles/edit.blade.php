@@ -6,7 +6,7 @@
 
         <div class="flex-1 bg-linear-to-br from-gray-50 via-white to-gray-100">
             <!-- Header -->
-            <div class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+            <div class="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
                 <div class="max-w-6xl mx-auto px-6 py-8">
                     <div class="flex items-center gap-3">
                         <a href="{{ route('admin.vehicles.index') }}" class="text-teal-600 hover:text-teal-700">

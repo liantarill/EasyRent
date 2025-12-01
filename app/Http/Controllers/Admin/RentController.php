@@ -15,9 +15,9 @@ class RentController extends Controller
      */
     public function index()
     {
-        $rents = Rent::all();
-
-        $rents = Rent::with(['user', 'approver', 'vehicle'])->get();
+        $rents = Rent::with(['user', 'approver', 'vehicle'])
+            ->latest()
+            ->paginate(10); // atau 15
 
         return view('admin.rents.index', compact('rents'));
     }
