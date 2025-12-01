@@ -37,7 +37,7 @@
     })();
 </script>
 
-<div class="flex">
+<div class="flex max-h-screen sticky top-0 z-40">
     <aside id="sidebar"
         class="z-20 hidden md:flex flex-col transition-all duration-200 ease-in-out bg-primary-main text-white
                w-64 min-h-screen overflow-visible shadow-lg relative
