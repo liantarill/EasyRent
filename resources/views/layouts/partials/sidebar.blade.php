@@ -47,7 +47,7 @@
             <a href="{{ url('/') }}" class="flex items-center gap-3">
                 <div id="brandIcon"
                     class="h-9 w-9 rounded-md bg-primary-accent flex items-center justify-center font-bold text-primary-main transition-all">
-                    <span class="brand-text">A</span>
+                    <span class="brand-text">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                 </div>
                 <span id="brandText" class="font-semibold text-lg transition-opacity hide-when-collapsed">
                     {{ $title ?? config('app.name', 'MyApp') }}</span>
@@ -62,7 +62,7 @@
 
         <button id="sidebarExpandBtn"
             class="hidden absolute top-4 -right-5 z-30 bg-primary-accent text-primary-main 
-            w-9 h-9 rounded-full items-center justify-center shadow-md  shadow-amber-500
+            w-9 h-9 rounded-full items-center justify-center shadow-md  shadow-primary-light
            hover:bg-primary-accent/80 hover:text-primary-main focus:outline-none"
             aria-label="Expand sidebar" title="Expand sidebar">
             <i class="fa-solid fa-caret-right text-lg"></i>

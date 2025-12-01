@@ -35,7 +35,14 @@ class CheckEmailVerification
             ->where('status', 'valid')
             ->where('unique_id', $uniqueId)
             ->exists();
+
         if ($hasValidVerification) {
+            EmailVerification::where('user_id', $user->id)
+                ->where('status', 'valid')
+                ->where('unique_id', $uniqueId)
+                ->update([
+                    'status' => 'active'
+                ]);
             return $next($request);
         }
 
