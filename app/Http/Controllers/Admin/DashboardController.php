@@ -50,7 +50,7 @@ class DashboardController extends Controller
                 ->orWhere('id', 'like', "%{$q}%");
         }
 
-        $transactions = $transactionsQuery->paginate(12);
+        $transactions = $transactionsQuery->paginate(5);
 
         // Payments waiting verification
         $payments = Payment::where('status', 'pending')
