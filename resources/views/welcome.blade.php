@@ -6,7 +6,7 @@
         @include('layouts.partials.navbar')
 
         <section class="relative w-full h-screen bg-cover bg-center overflow-hidden flex items-center justify-center"
-            style="background-image: linear-gradient(135deg, rgba(10,10,15,0.55) 0%, rgba(234,88,12,0.15) 100%), url('/images/hero2.jpg'); background-attachment: fixed;">
+            style="background-image: linear-gradient(135deg, rgba(10,10,15,0.55) 0%, rgba(234,88,12,0.15) 100%), url('/images/hero2-temp.jpg'); background-attachment: fixed;">
 
             <div class="absolute inset-0 bg-linear-to-r from-gray-950 via-transparent to-gray-950 opacity-40"></div>
 

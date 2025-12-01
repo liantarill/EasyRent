@@ -112,8 +112,6 @@
                                     <option value="">-- Pilih Tipe --</option>
                                     <option value="car" @selected(old('vehicle_type') === 'car')>Mobil</option>
                                     <option value="motorcycle" @selected(old('vehicle_type') === 'motorcycle')>Motor</option>
-                                    <option value="truck" @selected(old('vehicle_type') === 'truck')>Truk</option>
-                                    <option value="bus" @selected(old('vehicle_type') === 'bus')>Bus</option>
                                 </select>
                             </div>
                         </div>
@@ -154,7 +152,6 @@
                                     <option value="gasoline" @selected(old('fuel_type') === 'gasoline')>Bensin</option>
                                     <option value="diesel" @selected(old('fuel_type') === 'diesel')>Diesel</option>
                                     <option value="electric" @selected(old('fuel_type') === 'electric')>Listrik</option>
-                                    <option value="hybrid" @selected(old('fuel_type') === 'hybrid')>Hybrid</option>
                                 </select>
                             </div>
 
@@ -178,9 +175,9 @@
                                 <select name="status" required
                                     class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 transition-all duration-300">
                                     <option value="">-- Pilih Status --</option>
-                                    <option value="available" @selected(old('status') === 'available')>Tersedia</option>
-                                    <option value="rented" @selected(old('status') === 'rented')>Disewa</option>
-                                    <option value="maintenance" @selected(old('status') === 'maintenance')>Maintenance</option>
+                                    <option value="Available" @selected(old('status') === 'Available')>Tersedia</option>
+                                    <option value="Rented" @selected(old('status') === 'Rented')>Disewa</option>
+                                    <option value="Maintenance" @selected(old('status') === 'Maintenance')>Maintenance</option>
                                 </select>
                             </div>
                         </div>
