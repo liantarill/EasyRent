@@ -25,7 +25,8 @@
                             <span class="text-xs text-gray-500">{{ Auth::user()->email }}</span>
                         </div>
                         <div class="w-9 h-9 grid place-items-center rounded-lg bg-blue-600 text-white font-bold uppercase">
-                            AR</div>
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
                     </div>
                 </div>
 
@@ -35,7 +36,7 @@
                         <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-4 shadow-md">
                             <div class="w-11 h-11 grid place-items-center rounded-lg"
                                 style="background: {{ $card['icon_bg'] }}; color: {{ $card['icon_fg'] }};">
-                                {!! $card['icon'] !!}
+                                <i class="{{ $card['icon'] }}"></i>
                             </div>
                             <div class="flex-1">
                                 <p class="text-xs text-gray-500 mb-1">{{ $card['label'] }}</p>
@@ -96,8 +97,13 @@
                                                 <td class="px-4 py-3">{{ $item->payment->order_id }}</td>
                                                 <td class="px-4 py-3">{{ $item->user->name }}</td>
                                                 <td class="px-4 py-3">{{ $item->vehicle->brand }}</td>
-                                                <td class="px-4 py-3">{{ $item->rent_date }}</td>
-                                                <td class="px-4 py-3">{{ $item->return_date }}</td>
+                                                <td class="px-4 py-3">
+                                                    {{ \Carbon\Carbon::parse($item->rent_date)->format('d M Y') }}
+                                                </td>
+                                                <td class="px-4 py-3">
+                                                    {{ \Carbon\Carbon::parse($item->return_date)->format('d M Y') }} </td>
+
+                                                </td>
                                                 <td class="px-4 py-3"><span class="whitespace-nowrap">Rp
                                                         {{ number_format($item->total_price, 0, ',', '.') }}</span></td>
                                                 <td class="px-4 py-3"><span

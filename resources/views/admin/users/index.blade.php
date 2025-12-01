@@ -9,7 +9,7 @@
             <div class="mb-8">
                 <div class="flex items-center gap-3 mb-2">
                     <div
-                        class="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center">
+                        class="w-10 h-10 bg-linear-to-br from-primary-light to-primary-main rounded-lg flex items-center justify-center">
                         <i class="fas fa-users text-white text-lg"></i>
                     </div>
                     <h1 class="text-3xl font-bold text-gray-900">Users</h1>
@@ -20,7 +20,7 @@
             <!-- Table -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                    <thead class="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                         <tr class="text-gray-700 text-sm font-semibold">
                             <th class="text-left px-6 py-4">Username</th>
                             <th class="text-left px-6 py-4">Name</th>
@@ -74,7 +74,7 @@
 
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.users.show', $user->id) }}"
-                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-teal-50 text-teal-600 hover:text-teal-700 transition">
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg hover:bg-primary-accent text-primary-main hover:text-primary-dark transition">
                                         <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </td>

@@ -23,10 +23,10 @@ class DashboardController extends Controller
         $pendingPayments   = Payment::where('status', 'pending')->count();
 
         $statCards = [
-            ['label' => 'Total Mobil', 'value' => $totalVehicles, 'icon' => 'M', 'icon_bg' => '#e0f2fe', 'icon_fg' => '#1d4ed8'],
-            ['label' => 'Mobil Tersedia', 'value' => $availableVehicles, 'status' => 'available', 'icon' => 'T', 'icon_bg' => '#fef3c7', 'icon_fg' => '#d97706'],
-            ['label' => 'Transaksi Aktif', 'value' => $ongoingRents, 'status' => 'ongoing', 'icon' => 'A', 'icon_bg' => '#ecfdf3', 'icon_fg' => '#15803d'],
-            ['label' => 'Pembayaran Pending', 'value' => $pendingPayments, 'status' => 'pending', 'icon' => 'P', 'icon_bg' => '#fee2e2', 'icon_fg' => '#b91c1c'],
+            ['label' => 'Total Mobil', 'value' => $totalVehicles, 'icon' => 'fa-solid fa-car', 'icon_bg' => '#e0f2fe', 'icon_fg' => '#1d4ed8'],
+            ['label' => 'Mobil Tersedia', 'value' => $availableVehicles, 'status' => 'available', 'icon' => 'fas fa-check-circle', 'icon_bg' => '#fef3c7', 'icon_fg' => '#d97706'],
+            ['label' => 'Transaksi Aktif', 'value' => $ongoingRents, 'status' => 'ongoing', 'icon' => 'fa-solid fa-forward', 'icon_bg' => '#ecfdf3', 'icon_fg' => '#15803d'],
+            ['label' => 'Pembayaran Pending', 'value' => $pendingPayments, 'status' => 'pending', 'icon' => 'fa-solid fa-hourglass-half', 'icon_bg' => '#fee2e2', 'icon_fg' => '#b91c1c'],
         ];
 
         // Transactions (Rents) — include related user, vehicle and payment
