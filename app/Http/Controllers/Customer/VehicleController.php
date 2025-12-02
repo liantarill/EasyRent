@@ -15,7 +15,7 @@ class VehicleController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'search'       => 'nullable|string',
             'type'         => 'nullable|in:car,motorcycle',
             'transmission' => 'nullable|in:automatic,manual',
@@ -25,66 +25,52 @@ class VehicleController extends Controller
 
         $vehiclesQuery = Vehicle::query()->where('status', 'Available');
 
-        // Search (case-insensitive)
-        $search = $request->string('search')->trim()->toString();
-        if ($search !== '') {
-            $searchTerm = Str::lower($search);
+        // Search
+        if (!empty($validated['search'])) {
+            $search = Str::lower(trim($validated['search']));
 
-            $vehiclesQuery->where(function ($query) use ($searchTerm) {
-                $query->whereRaw('LOWER(brand) LIKE ?', ['%' . $searchTerm . '%'])
-                    ->orWhereRaw('LOWER(plate_number) LIKE ?', ['%' . $searchTerm . '%'])
-                    ->orWhereRaw('LOWER(vehicle_type) LIKE ?', ['%' . $searchTerm . '%']);
+            $vehiclesQuery->where(function ($query) use ($search) {
+                $query->whereRaw('LOWER(brand) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(plate_number) LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('LOWER(vehicle_type) LIKE ?', ["%{$search}%"]);
             });
         }
 
-        // Vehicle type filter
-        $type = $request->string('type')->trim()->toString();
-        if ($type !== '') {
-            $vehiclesQuery->where('vehicle_type', $type);
+        // Type
+        if (!empty($validated['type'])) {
+            $vehiclesQuery->where('vehicle_type', $validated['type']);
         }
 
-        // Transmission filter
-        $transmission = $request->string('transmission')->trim()->toString();
-        if ($transmission !== '') {
-            $vehiclesQuery->where('transmission', $transmission);
+        // Transmission
+        if (!empty($validated['transmission'])) {
+            $vehiclesQuery->where('transmission', $validated['transmission']);
         }
 
-        // Availability date filter: hanya apply jika kedua tanggal diberikan
-        $rentDateInput   = $data['rent_date'] ?? null;
-        $returnDateInput = $data['return_date'] ?? null;
+        // Date filter
+        $rentDate   = $validated['rent_date'] ?? null;
+        $returnDate = $validated['return_date'] ?? null;
 
-        if ($rentDateInput && $returnDateInput) {
-            $rentDate   = Carbon::parse($rentDateInput)->startOfDay();
-            $returnDate = Carbon::parse($returnDateInput)->endOfDay();
+        if ($rentDate && $returnDate) {
+            $start = Carbon::parse($rentDate)->startOfDay();
+            $end   = Carbon::parse($returnDate)->endOfDay();
 
-            $vehiclesQuery->whereDoesntHave('rents', function ($q) use ($rentDate, $returnDate) {
-                // anggap 'Pending Verification' dan 'Verified' berarti booking memblokir kendaraan
-                $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
-                    ->where(function ($q2) use ($rentDate, $returnDate) {
-                        // overlap condition:
-                        // existing.rent_date <= requested_return AND existing.return_date >= requested_rent
-                        $q2->where('rent_date', '<=', $returnDate->toDateString())
-                            ->where('return_date', '>=', $rentDate->toDateString());
+            $vehiclesQuery->whereDoesntHave('rents', function ($rent) use ($start, $end) {
+                $rent->whereIn('rent_status', ['Pending Verification', 'Verified'])
+                    ->where(function ($q) use ($start, $end) {
+                        $q->where('rent_date', '<=', $end)
+                            ->where('return_date', '>=', $start);
                     });
             });
         }
 
         $vehicles = $vehiclesQuery->latest()->paginate(9)->withQueryString();
 
-        // Kirim kembali filters agar form tetap terisi
-        $filters = [
-            'search'       => $search,
-            'type'         => $type,
-            'transmission' => $transmission,
-            'rent_date'    => $rentDateInput,
-            'return_date'  => $returnDateInput,
-        ];
-
         return view('customer.vehicles.index', [
             'vehicles' => $vehicles,
-            'filters'  => $filters,
+            'filters'  => $validated,
         ]);
     }
+
 
     /**
      * Display detail for a specific vehicle.
