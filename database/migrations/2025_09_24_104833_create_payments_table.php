@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('snap_token')->nullable();
             $table->string('method')->default('midtrans');
             $table->decimal('amount', 12, 2);
-            $table->enum('status', ['Pending', 'Pending Payment', 'Paid', 'Failed', 'Expired'])->default('Pending');
+            $table->enum('status', ['Pending', 'Pending Payment', 'Paid', 'Failed', 'Expired', 'Cancelled'])->default('Pending');
             $table->timestamps();
 
             // Add index for faster queries

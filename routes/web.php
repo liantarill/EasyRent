@@ -112,3 +112,4 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 });
 
 Route::post('/payment/notification', [App\Http\Controllers\Customer\PaymentController::class, 'notification'])->name('payments.notification');
+Route::post('/payment/{payment}/cancel', [App\Http\Controllers\Customer\PaymentController::class, 'cancel'])->name('payments.cancel');

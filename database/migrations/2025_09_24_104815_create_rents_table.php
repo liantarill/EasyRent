@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('return_date');
             $table->decimal('daily_price_snapshot', 12, 2);
             $table->decimal('total_price', 12, 2);
-            $table->enum('rent_status', ['Pending Verification', 'Verified', 'Rejected'])->default('Pending Verification');
+            $table->enum('rent_status', ['Pending Verification', 'Verified', 'Rejected', 'Cancelled'])->default('Pending Verification');
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();

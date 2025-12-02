@@ -96,6 +96,50 @@ class PaymentController extends Controller
         return view('customer.payments.finish', compact('payment'));
     }
 
+    public function cancel(Payment $payment)
+    {
+        // Load Midtrans configuration
+        $serverKey = config('midtrans.server_key');
+        $isProduction = config('midtrans.is_production');
+
+        // VALIDASI serverKey agar tidak kosong
+        if (!$serverKey) {
+            return back()->with('error', 'Midtrans server key tidak ditemukan.');
+        }
+
+        // Tentukan base URL sesuai environment
+        $baseUrl = $isProduction
+            ? "https://api.midtrans.com/v2/"
+            : "https://api.sandbox.midtrans.com/v2/";
+
+        $orderId = $payment->order_id;
+        $url = $baseUrl . $orderId . "/cancel";
+
+        try {
+            $client = new \GuzzleHttp\Client();
+
+            $response = $client->post($url, [
+                'auth' => [$serverKey, ''], // AUTH BENAR
+                'headers' => [
+                    'Accept' => 'application/json',
+                ]
+            ]);
+
+            $result = json_decode($response->getBody(), true);
+
+            // Update payment status
+            $payment->update(['status' => 'Cancelled']);
+            $payment->rent->update(['rent_status' => 'Cancelled']);
+
+            return back()->with('success', 'Payment berhasil dibatalkan.');
+        } catch (\Exception $e) {
+            Log::error('Midtrans Cancel Error: ' . $e->getMessage());
+
+            return back()->with('error', 'Gagal membatalkan payment: ' . $e->getMessage());
+        }
+    }
+
+
     public function notification(Request $request)
     {
         // Set Midtrans configuration
