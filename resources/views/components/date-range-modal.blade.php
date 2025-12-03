@@ -57,177 +57,230 @@
         </div>
     </div>
 </div>
-
 @push('scripts')
     <script>
-        const modal = document.getElementById('dateModal');
-        const dateRangeBtn = document.getElementById('dateRangeBtn');
-        const dateRangeDisplay = document.getElementById('dateRangeDisplay');
-        const calendarDays = document.getElementById('calendarDays');
-        const currentMonthDisplay = document.getElementById('currentMonth');
-        const prevMonthBtn = document.getElementById('prevMonth');
-        const nextMonthBtn = document.getElementById('nextMonth');
-        const cancelBtn = document.getElementById('cancelDateBtn');
-        const clearBtn = document.getElementById('clearDateBtn');
-        const applyBtn = document.getElementById('applyDateBtn');
-        const hiddenRentDate = document.getElementById('rent_date');
-        const hiddenReturnDate = document.getElementById('return_date');
+        (function() {
+            const modal = document.getElementById('dateModal');
+            const dateRangeBtn = document.getElementById('dateRangeBtn');
+            const dateRangeDisplay = document.getElementById('dateRangeDisplay');
+            const calendarDays = document.getElementById('calendarDays');
+            const currentMonthDisplay = document.getElementById('currentMonth');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const cancelBtn = document.getElementById('cancelDateBtn');
+            const clearBtn = document.getElementById('clearDateBtn');
+            const applyBtn = document.getElementById('applyDateBtn');
 
-        let currentDate = new Date();
-        let selectedStartDate = null;
-        let selectedEndDate = null;
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+            // Flexible lookup for the hidden inputs:
+            function findHiddenInputs() {
+                // primary: by name (recommended)
+                let rent = document.querySelector('input[name="rent_date"]');
+                let ret = document.querySelector('input[name="return_date"]');
 
-        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-        ];
+                // fallback: any id that ends with _rent_date / _return_date
+                if (!rent) rent = document.querySelector('input[id$="_rent_date"]');
+                if (!ret) ret = document.querySelector('input[id$="_return_date"]');
 
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-
-            currentMonthDisplay.textContent = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const prevLastDay = new Date(year, month, 0);
-
-            let firstDayOfWeek = firstDay.getDay();
-            firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
-
-            calendarDays.innerHTML = '';
-
-            for (let i = firstDayOfWeek; i > 0; i--) {
-                const day = prevLastDay.getDate() - i + 1;
-                const dayEl = document.createElement('div');
-                dayEl.textContent = day;
-                dayEl.className = 'text-center py-2 text-gray-300 text-sm cursor-not-allowed';
-                calendarDays.appendChild(dayEl);
+                return {
+                    rent,
+                    ret
+                };
             }
 
-            for (let day = 1; day <= lastDay.getDate(); day++) {
-                const dayDate = new Date(year, month, day);
-                dayDate.setHours(0, 0, 0, 0);
+            // initial references (may be null if not yet in DOM)
+            let {
+                rent: hiddenRentDate,
+                ret: hiddenReturnDate
+            } = findHiddenInputs();
 
-                const dayEl = document.createElement('div');
-                dayEl.textContent = day;
+            // calendar state
+            let currentDate = new Date();
+            let selectedStartDate = null;
+            let selectedEndDate = null;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-                const isPast = dayDate < today;
+            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
+                'Oktober', 'November', 'Desember'
+            ];
 
-                if (isPast) {
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+                currentMonthDisplay.textContent = `${monthNames[month]} ${year}`;
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const prevLastDay = new Date(year, month, 0);
+
+                let firstDayOfWeek = firstDay.getDay();
+                firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
+                calendarDays.innerHTML = '';
+
+                for (let i = firstDayOfWeek; i > 0; i--) {
+                    const day = prevLastDay.getDate() - i + 1;
+                    const dayEl = document.createElement('div');
+                    dayEl.textContent = day;
                     dayEl.className = 'text-center py-2 text-gray-300 text-sm cursor-not-allowed';
-                } else {
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                    const isStart = selectedStartDate && dateStr === selectedStartDate;
-                    const isEnd = selectedEndDate && dateStr === selectedEndDate;
+                    calendarDays.appendChild(dayEl);
+                }
 
-                    let isInRange = false;
-                    if (selectedStartDate && selectedEndDate) {
-                        const startDate = new Date(selectedStartDate);
-                        const endDate = new Date(selectedEndDate);
-                        startDate.setHours(0, 0, 0, 0);
-                        endDate.setHours(0, 0, 0, 0);
-                        isInRange = dayDate > startDate && dayDate < endDate;
-                    }
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const dayDate = new Date(year, month, day);
+                    dayDate.setHours(0, 0, 0, 0);
 
-                    if (isStart || isEnd) {
-                        dayEl.className =
-                            'text-center py-2 bg-teal-600 text-white font-bold rounded-lg cursor-pointer text-sm transition-all duration-200 hover:shadow-lg hover:scale-105';
-                    } else if (isInRange) {
-                        dayEl.className =
-                            'text-center py-2 bg-teal-50 text-teal-700 text-sm cursor-pointer transition-all duration-200';
+                    const dayEl = document.createElement('div');
+                    dayEl.textContent = day;
+
+                    const isPast = dayDate < today;
+
+                    if (isPast) {
+                        dayEl.className = 'text-center py-2 text-gray-300 text-sm cursor-not-allowed';
                     } else {
-                        dayEl.className =
-                            'text-center py-2 text-gray-700 text-sm cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200 hover:scale-105';
+                        const dateStr = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                        const isStart = selectedStartDate && dateStr === selectedStartDate;
+                        const isEnd = selectedEndDate && dateStr === selectedEndDate;
+
+                        let isInRange = false;
+                        if (selectedStartDate && selectedEndDate) {
+                            const startDate = new Date(selectedStartDate);
+                            const endDate = new Date(selectedEndDate);
+                            startDate.setHours(0, 0, 0, 0);
+                            endDate.setHours(0, 0, 0, 0);
+                            isInRange = dayDate > startDate && dayDate < endDate;
+                        }
+
+                        if (isStart || isEnd) {
+                            dayEl.className =
+                                'text-center py-2 bg-teal-600 text-white font-bold rounded-lg cursor-pointer text-sm transition-all duration-200 hover:shadow-lg hover:scale-105';
+                        } else if (isInRange) {
+                            dayEl.className =
+                                'text-center py-2 bg-teal-50 text-teal-700 text-sm cursor-pointer transition-all duration-200';
+                        } else {
+                            dayEl.className =
+                                'text-center py-2 text-gray-700 text-sm cursor-pointer hover:bg-gray-100 rounded-lg transition-all duration-200 hover:scale-105';
+                        }
+
+                        dayEl.addEventListener('click', () => selectDate(dateStr));
                     }
 
-                    dayEl.addEventListener('click', () => selectDate(dateStr));
+                    calendarDays.appendChild(dayEl);
                 }
-
-                calendarDays.appendChild(dayEl);
             }
-        }
 
-        function selectDate(dateStr) {
-            if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
-                selectedStartDate = dateStr;
-                selectedEndDate = null;
-            } else {
-                if (new Date(dateStr) < new Date(selectedStartDate)) {
-                    selectedEndDate = selectedStartDate;
+            function selectDate(dateStr) {
+                if (!selectedStartDate || (selectedStartDate && selectedEndDate)) {
                     selectedStartDate = dateStr;
+                    selectedEndDate = null;
                 } else {
-                    selectedEndDate = dateStr;
+                    if (new Date(dateStr) < new Date(selectedStartDate)) {
+                        selectedEndDate = selectedStartDate;
+                        selectedStartDate = dateStr;
+                    } else {
+                        selectedEndDate = dateStr;
+                    }
                 }
-            }
-            renderCalendar();
-        }
-
-        prevMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        });
-
-        nextMonthBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        });
-
-        dateRangeBtn.addEventListener('click', () => {
-            if (hiddenRentDate.value) selectedStartDate = hiddenRentDate.value;
-            if (hiddenReturnDate.value) selectedEndDate = hiddenReturnDate.value;
-
-            if (selectedStartDate) {
-                currentDate = new Date(selectedStartDate);
+                renderCalendar();
             }
 
-            renderCalendar();
-            modal.classList.remove('hidden');
-            modal.style.animation = 'fadeIn 0.3s ease-out';
-        });
+            prevMonthBtn?.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
 
-        cancelBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
+            nextMonthBtn?.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
+            // Open modal safely
+            function openModal() {
+                // refresh references in case DOM changed (e.g. component re-render)
+                ({
+                    rent: hiddenRentDate,
+                    ret: hiddenReturnDate
+                } = findHiddenInputs());
+
+                // load existing values
+                if (hiddenRentDate && hiddenRentDate.value) selectedStartDate = hiddenRentDate.value;
+                if (hiddenReturnDate && hiddenReturnDate.value) selectedEndDate = hiddenReturnDate.value;
+
+                if (selectedStartDate) currentDate = new Date(selectedStartDate);
+
+                renderCalendar();
+                modal?.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
             }
-        });
 
-        clearBtn.addEventListener('click', () => {
-            selectedStartDate = null;
-            selectedEndDate = null;
-            hiddenRentDate.value = '';
-            hiddenReturnDate.value = '';
-            dateRangeDisplay.textContent = 'Pilih Tanggal Sewa';
-            renderCalendar();
-            modal.classList.add('hidden');
-        });
+            function closeModal() {
+                modal?.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
 
-        applyBtn.addEventListener('click', () => {
-            if (selectedStartDate && selectedEndDate) {
-                hiddenRentDate.value = selectedStartDate;
-                hiddenReturnDate.value = selectedEndDate;
-                const startFormatted = new Date(selectedStartDate).toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
+            if (dateRangeBtn) {
+                dateRangeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openModal();
                 });
-
-                const endFormatted = new Date(selectedEndDate).toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-
-                dateRangeDisplay.textContent = `${startFormatted} - ${endFormatted}`;
-                modal.classList.add('hidden');
             } else {
-                alert('Silakan pilih tanggal mulai dan tanggal selesai');
+                // fallback: listen for custom event if button isn't present yet
+                window.addEventListener('open-date-range', openModal);
             }
-        });
+
+            cancelBtn?.addEventListener('click', closeModal);
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            clearBtn?.addEventListener('click', () => {
+                selectedStartDate = null;
+                selectedEndDate = null;
+                if (hiddenRentDate) hiddenRentDate.value = '';
+                if (hiddenReturnDate) hiddenReturnDate.value = '';
+                if (dateRangeDisplay) dateRangeDisplay.textContent = 'Pilih Tanggal Sewa';
+                renderCalendar();
+                closeModal();
+            });
+
+            applyBtn?.addEventListener('click', () => {
+                if (selectedStartDate && selectedEndDate) {
+
+                    // Set hidden inputs
+                    if (hiddenRentDate) hiddenRentDate.value = selectedStartDate;
+                    if (hiddenReturnDate) hiddenReturnDate.value = selectedEndDate;
+
+                    // Update display
+                    const startFormatted = new Date(selectedStartDate).toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    const endFormatted = new Date(selectedEndDate).toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                    if (dateRangeDisplay) dateRangeDisplay.textContent = `${startFormatted} - ${endFormatted}`;
+
+                    // 🔥 AUTO SUBMIT FORM 🔥
+                    const form = hiddenRentDate?.closest('form');
+                    if (form) form.submit();
+
+                    closeModal();
+                } else {
+                    alert('Silakan pilih tanggal mulai dan tanggal selesai');
+                }
+            });
+
+
+            // Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
+            });
+
+            // initial render
+            renderCalendar();
+        })();
     </script>
 @endpush

@@ -54,13 +54,14 @@ class VehicleController extends Controller
             $start = Carbon::parse($rentDate)->startOfDay();
             $end   = Carbon::parse($returnDate)->endOfDay();
 
-            $vehiclesQuery->whereDoesntHave('rents', function ($rent) use ($start, $end) {
-                $rent->whereIn('rent_status', ['Pending Verification', 'Verified'])
-                    ->where(function ($q) use ($start, $end) {
-                        $q->where('rent_date', '<=', $end)
-                            ->where('return_date', '>=', $start);
-                    });
-            });
+            $vehiclesQuery
+                ->withCount(['rents as is_rented' => function ($q) use ($start, $end) {
+                    $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
+                        ->where(function ($date) use ($start, $end) {
+                            $date->where('rent_date', '<=', $end)
+                                ->where('return_date', '>=', $start);
+                        });
+                }]);
         }
 
         $vehicles = $vehiclesQuery->latest()->paginate(9)->withQueryString();

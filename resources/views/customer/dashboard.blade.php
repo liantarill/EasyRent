@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="min-h-screen bg-[#f6fafb] text-gray-900">
+    <div class="min-h-screen bg-bg text-gray-900">
         @include('layouts.partials.navbar')
 
         @php
@@ -35,11 +35,40 @@
             </section>
 
             <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                @foreach ([['label' => 'Total Transaksi', 'value' => $totalTransaksi, 'color' => '#00b894'], ['label' => 'Sedang Berjalan', 'value' => $sedangBerjalan, 'color' => '#3b82f6'], ['label' => 'Selesai', 'value' => $selesai, 'color' => '#10b981'], ['label' => 'Menunggu Pembayaran', 'value' => $menungguPembayaran, 'color' => '#f59e0b']] as $card)
+                @php
+                    $cards = [
+                        [
+                            'label' => 'Total Transaksi',
+                            'value' => $totalTransaksi,
+                            'color' => '#00b894',
+                            'icon' => 'fa-receipt',
+                        ],
+                        [
+                            'label' => 'Sedang Berjalan',
+                            'value' => $sedangBerjalan,
+                            'color' => '#3b82f6',
+                            'icon' => 'fa-spinner',
+                        ],
+                        [
+                            'label' => 'Selesai',
+                            'value' => $selesai,
+                            'color' => '#10b981',
+                            'icon' => 'fa-check-circle',
+                        ],
+                        [
+                            'label' => 'Menunggu Pembayaran',
+                            'value' => $menungguPembayaran,
+                            'color' => '#f59e0b',
+                            'icon' => 'fa-hourglass-half',
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($cards as $card)
                     <div class="rounded-2xl bg-white shadow-sm border border-gray-100 p-5 flex items-center gap-4">
-                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold"
+                        <div class="w-11 h-11 rounded-xl flex items-center justify-center text-white text-lg"
                             style="background: {{ $card['color'] }};">
-                            {{ strtoupper(substr($card['label'], 0, 1)) }}
+                            <i class="fas {{ $card['icon'] }}"></i>
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">{{ $card['label'] }}</p>
