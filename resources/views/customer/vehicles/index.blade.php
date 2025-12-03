@@ -58,8 +58,13 @@
                                 </div>
 
                                 <!-- Pagination -->
-                                <div class="mt-6">
+                                {{-- <div class="mt-6">
                                     {{ $vehicles->withQueryString()->links() }}
+                                </div> --}}
+                                <div class="mt-6 flex">
+                                    <div class="space-x-1">
+                                        {{ $vehicles->withQueryString()->links('components.pagination-colored') }}
+                                    </div>
                                 </div>
                             @endif
                         </main>

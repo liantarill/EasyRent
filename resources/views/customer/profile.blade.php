@@ -302,7 +302,7 @@
             </div>
 
             <!-- Password Change Section -->
-            <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            {{-- <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-[#f59e0b]/10 flex items-center justify-center">
@@ -326,7 +326,7 @@
                         Ubah Password
                     </button>
                 </div>
-            </section>
+            </section> --}}
         </div>
     </div>
 
