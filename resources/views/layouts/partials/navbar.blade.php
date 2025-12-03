@@ -6,24 +6,28 @@
             EASY<span class="text-primary-main">RENT</span>
         </a>
 
-        @auth
+@auth
+            @php
+                $activeClass = 'text-primary-main font-semibold underline underline-offset-4';
+                $inactiveClass = 'text-gray-500 hover:text-primary-main';
+            @endphp
             <div class="hidden md:flex items-center space-x-1">
                 @if (Auth::user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">Dashboard</a>
                     <a href="{{ route('admin.rents.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.rents.*') ? $activeClass : $inactiveClass }}">Rents</a>
                     <a href="{{ route('admin.vehicles.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.vehicles.*') ? $activeClass : $inactiveClass }}">Vehicles</a>
                 @else
                     <a href="{{ route('customer.dashboard') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Dashboard</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.dashboard') ? $activeClass : $inactiveClass }}">Dashboard</a>
                     <a href="{{ route('customer.vehicles.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.vehicles.*') ? $activeClass : $inactiveClass }}">Vehicles</a>
                     <a href="{{ route('customer.rents.index') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Transactions</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.rents.*') ? $activeClass : $inactiveClass }}">Transactions</a>
                     <a href="{{ route('customer.profile') }}"
-                        class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Profile</a>
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.profile') ? $activeClass : $inactiveClass }}">Profile</a>
                 @endif
             </div>
         @endauth
@@ -63,22 +67,26 @@
         <div class="px-6 py-6 space-y-4">
 
             @auth
+                @php
+                    $mobileActive = 'text-primary-main font-semibold';
+                    $mobileInactive = 'text-gray-500 hover:text-primary-main';
+                @endphp
                 @if (Auth::user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.dashboard') ? $mobileActive : $mobileInactive }}">Dashboard</a>
                     <a href="{{ route('admin.rents.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Rents</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.rents.*') ? $mobileActive : $mobileInactive }}">Rents</a>
                     <a href="{{ route('admin.vehicles.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.vehicles.*') ? $mobileActive : $mobileInactive }}">Vehicles</a>
                 @else
                     <a href="{{ route('customer.dashboard') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Dashboard</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.dashboard') ? $mobileActive : $mobileInactive }}">Dashboard</a>
                     <a href="{{ route('customer.vehicles.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.vehicles.*') ? $mobileActive : $mobileInactive }}">Vehicles</a>
                     <a href="{{ route('customer.rents.index') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Transactions</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.rents.*') ? $mobileActive : $mobileInactive }}">Transactions</a>
                     <a href="{{ route('customer.profile') }}"
-                        class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Profile</a>
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.profile') ? $mobileActive : $mobileInactive }}">Profile</a>
                 @endif
 
                 <div class="pt-4 mt-2 border-t border-primary-main/20">
