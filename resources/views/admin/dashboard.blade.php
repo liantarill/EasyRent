@@ -8,7 +8,7 @@
     <div class="min-h-screen bg-gray-50">
         <div class="flex">
             @include('layouts.partials.sidebar')
-
+z
             <main class="flex-1 max-w-6xl mx-auto w-full p-6 lg:p-8">
                 <!-- Topbar -->
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
