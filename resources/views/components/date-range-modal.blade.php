@@ -4,7 +4,7 @@
     class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm transition-all duration-200">
     <div class="bg-white rounded-lg shadow-2xl max-w-sm w-11/12 overflow-hidden transform transition-all duration-200">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-teal-600 to-teal-500 px-6 py-6">
+        <div class="bg-linear-to-r from-teal-600 to-teal-500 px-6 py-6">
             <h3 class="text-xl font-bold text-white text-center">Pilih Tanggal Sewa</h3>
             <p class="text-teal-100 text-sm text-center mt-1">Tanggal mulai dan kembali</p>
         </div>

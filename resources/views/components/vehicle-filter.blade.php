@@ -30,8 +30,9 @@
         <div id="{{ $id }}_Body" class="p-6 filter-body">
             @if (empty($filters['rent_date']) || empty($filters['return_date']))
                 <div
-                    class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm font-semibold rounded-lg">
-                    ⚠️ Silakan pilih tanggal sewa terlebih dahulu untuk melihat ketersediaan kendaraan.
+                    class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm font-semibold rounded-lg flex items-center">
+                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                    Silahkan pilih tanggal sewa terlebih dahulu untuk melihat ketersediaan kendaraan.
                 </div>
             @endif
             <form method="GET" class="space-y-5">

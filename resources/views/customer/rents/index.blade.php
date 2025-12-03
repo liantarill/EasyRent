@@ -98,12 +98,14 @@
                                     'Pending Verification' => 'fa-hourglass-half',
                                     'Verified' => 'fa-check-circle',
                                     'Rejected' => 'fa-times-circle',
+                                    'Cancelled' => 'fa-times-circle',
                                     default => 'fa-question-circle',
                                 };
                                 $badgeColor = match ($status) {
                                     'Pending Verification' => 'bg-yellow-50 text-yellow-700 border-yellow-200',
                                     'Verified' => 'bg-green-50 text-green-700 border-green-200',
                                     'Rejected' => 'bg-red-50 text-red-700 border-red-200',
+                                    'Cancelled' => 'bg-red-50 text-red-700 border-red-200',
                                     default => 'bg-gray-50 text-gray-700 border-gray-200',
                                 };
                             @endphp
@@ -195,6 +197,12 @@
                                                     'text-yellow-700',
                                                     'icon' => 'fa-clock',
                                                     'label' => 'Pembayaran Tertunda',
+                                                ],
+                                                $paymentStatus === 'cancelled' => [
+                                                    'bg-red-50',
+                                                    'text-red-700',
+                                                    'icon' => 'fa-times',
+                                                    'label' => 'Pembayaran Dibatalkan',
                                                 ],
                                                 default => [
                                                     'bg-red-50',

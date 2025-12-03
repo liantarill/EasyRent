@@ -69,7 +69,7 @@
             @if (!$isProfileComplete)
                 <div
                     class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow">
-                    <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center shrink-0">
                         <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
                     </div>
                     <div class="flex-1">

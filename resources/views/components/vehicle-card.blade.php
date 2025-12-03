@@ -23,11 +23,12 @@
             class="absolute top-3 right-3 bg-primary-main text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm">
             {{ ucfirst($vehicle->vehicle_type) }}
         </div> --}}
-        <div
-            class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm
-    {{ $vehicle->is_rented > 0 ? 'bg-red-600 text-white' : 'bg-primary-main text-white' }}">
-            {{ $vehicle->is_rented > 0 ? 'Rented' : 'Available' }}
-        </div>
+        @if ($rentDate && $returnDate)
+            <div
+                class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm text-white {{ $vehicle->is_rented > 0 ? 'bg-red-600' : 'bg-primary-main ' }}">
+                {{ $vehicle->is_rented > 0 ? 'Rented' : 'Available' }}
+            </div>
+        @endif
 
     </div>
 
@@ -70,7 +71,7 @@
             </p>
 
             <!-- Buttons in compact vertical layout -->
-            <div class="space-y-2">
+            <div class="space-y-2 ">
                 <!-- Detail Button -->
                 <a href="#" data-modal-target="vehicleDetailModal-{{ $vehicle->id }}"
                     class="block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md font-medium text-sm hover:bg-gray-200 transition text-center">

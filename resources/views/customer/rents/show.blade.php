@@ -18,6 +18,17 @@
                 </div>
             @endif
 
+            @if (session('error'))
+                <div
+                    class="mb-6 flex items-center gap-3 bg-linear-to-r from-green-50 to-emerald-50 border border-green-300 rounded-xl p-4">
+                    <div class="shrink-0">
+                        <i class="fas fa-check-circle text-2xl text-green-600"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-green-900">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
             @if (session('info'))
                 <div
                     class="mb-6 flex items-center gap-3 bg-linear-to-r from-blue-50 to-cyan-50 border border-blue-300 rounded-xl p-4">
@@ -29,7 +40,22 @@
                     </div>
                 </div>
             @endif
-
+            <!-- Error Messages -->
+            @if ($errors->any())
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-circle text-red-600 mt-0.5"></i>
+                        <div>
+                            <h3 class="font-semibold text-red-900 mb-2">Terjadi Kesalahan:</h3>
+                            <ul class="list-disc list-inside text-red-800 text-sm space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
             <!-- Header Section -->
             <div class="mb-8">
                 <a href="{{ route('customer.rents.index') }}"
@@ -56,6 +82,7 @@
                             'Pending Verification' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
                             'Verified' => 'bg-green-100 text-green-800 border-green-300',
                             'Rejected' => 'bg-red-100 text-red-800 border-red-300',
+                            'Cancelled' => 'bg-red-100 text-red-800 border-red-300',
                         ];
                         $badgeClass = $badgeColors[$status] ?? 'bg-gray-100 text-gray-800 border-gray-300';
                     @endphp
@@ -101,7 +128,8 @@
                                 <div class="pb-6">
                                     <p class="text-sm font-bold uppercase tracking-widest text-gray-600 mb-1">Tanggal Mulai
                                     </p>
-                                    <p class="text-2xl font-black text-gray-900">{{ $rent->rent_date->format('d M Y') }}</p>
+                                    <p class="text-2xl font-black text-gray-900">{{ $rent->rent_date->format('d M Y') }}
+                                    </p>
                                     <p class="text-gray-600 mt-1">Pengambilan kendaraan</p>
                                 </div>
                             </div>
@@ -219,9 +247,11 @@
                             $hasPaid = $rent->payment && strtolower($rent->payment->status) === 'paid';
                             $hasPending =
                                 $rent->payment &&
-                                in_array(strtolower($rent->payment->status), ['pending', 'pending payment']);
+                                in_array(strtolower($rent->payment->status), ['pending', 'pending Payment']);
                             $hasFailed =
                                 $rent->payment && in_array(strtolower($rent->payment->status), ['failed', 'expired']);
+                            $hasCancelled = $rent->payment && strtolower($rent->payment->status) === 'cancelled';
+
                         @endphp
 
                         @if ($hasPaid)
@@ -235,6 +265,19 @@
                                     <div>
                                         <p class="font-bold text-green-900">Pembayaran Berhasil</p>
                                         <p class="text-sm text-green-700 mt-1">Pesanan Anda telah dikonfirmasi</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif($hasCancelled)
+                            <div class="bg-linear-to-br from-red-50 to-red-50 border-2 border-red-300 rounded-xl p-4 mb-6">
+                                <div class="flex items-start gap-3">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white shrink-0 mt-0.5">
+                                        <i class="fas fa-check text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-red-900">Pembayaran Dibatalkan</p>
+                                        <p class="text-sm text-red-700 mt-1">Pesanan Anda telah dibatalkan</p>
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +314,8 @@
                                 <form action="{{ route('customer.payments.checkout', $rent->id) }}" method="GET"
                                     class="space-y-2">
                                     <button type="submit"
-                                        class="w-full px-4 py-3 bg-linear-to-r from-teal-600 to-teal-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 flex items-center justify-center gap-2">
+                                        class="w-full px-4 py-3 bg-linear-to-r from-teal-600 to-teal-500 text-white font-semibold rounded-xl 
+               hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 flex items-center justify-center gap-2">
                                         <i class="fas fa-credit-card"></i>
                                         @if ($hasPending || $hasFailed)
                                             Coba Pembayaran Lagi
@@ -280,6 +324,16 @@
                                         @endif
                                     </button>
                                 </form>
+
+                                <form action="{{ route('payments.cancel', $rent->payment->id) }}" method="POST">
+                                    @csrf
+                                    <button
+                                        class="w-full mt-2 px-4 py-3 bg-linear-to-r from-red-700 to-red-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-red-500/30 transition-all duration-300">
+                                        <i class="fas fa-times-circle"></i>
+                                        Batalkan
+                                    </button>
+                                </form>
+
 
                                 @if ($rent->payment)
                                     <p class="text-xs text-gray-500 mt-3 text-center">
