@@ -6,8 +6,9 @@
 @endphp
 
 <aside id="{{ $id }}"
-    class="z-20 w-full min-h-screen hidden lg:flex lg:w-72 lg:sticky  top-0   h-fit transition-all duration-200 ease-in-out">
-    <div class="bg-white border overflow-visible border-gray-100 pt-25 rounded-2xl shadow-sm relative">
+    class="z-20 w-full min-h-screen hidden lg:flex lg:w-72 lg:fixed  top-0   h-fit transition-all duration-200 ease-in-out">
+
+    <div class="bg-white border overflow-visible border-gray-100 pt-25  shadow-sm relative">
         <!-- Header -->
         <div class="flex items-center justify-between gap-2 p-4 border-b border-gray-100">
             <div class="flex items-center gap-2">
@@ -28,13 +29,7 @@
 
         <!-- Body -->
         <div id="{{ $id }}_Body" class="p-6 filter-body">
-            @if (empty($filters['rent_date']) || empty($filters['return_date']))
-                <div
-                    class="mb-4 p-3 bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm font-semibold rounded-lg flex items-center">
-                    <i class="fa-solid fa-triangle-exclamation mr-2"></i>
-                    Silahkan pilih tanggal sewa terlebih dahulu untuk melihat ketersediaan kendaraan.
-                </div>
-            @endif
+
             <form method="GET" class="space-y-5">
                 <!-- Search -->
                 <div class="transition-opacity duration-200 hide-when-collapsed">
@@ -187,18 +182,32 @@
 
                     // Apply state from localStorage
                     try {
-                        const isCollapsed = localStorage.getItem(COLLAPSED_KEY) === '1';
-                        if (isCollapsed) {
-                            aside.classList.add('collapsed');
-                        }
-                        // let stored = localStorage.getItem(COLLAPSED_KEY);
-
-                        // // DEFAULT = collapsed
-                        // let isCollapsed = stored === null ? true : stored === '1';
-
+                        // const isCollapsed = localStorage.getItem(COLLAPSED_KEY) === '1';
                         // if (isCollapsed) {
                         //     aside.classList.add('collapsed');
                         // }
+
+
+                        // Ambil state dari localStorage + kondisi URL (rent/return)
+                        // const isCollapsed =
+                        //     localStorage.getItem(COLLAPSED_KEY) === '1' ||
+                        //     window.shouldCollapseFilter === true;
+
+                        let stored = localStorage.getItem(COLLAPSED_KEY);
+
+                        // DEFAULT = collapsed
+                        let isCollapsed = stored === null ? true || window.shouldCollapseFilter === true :
+                            stored === '1';
+
+                        if (isCollapsed) {
+                            aside.classList.add('collapsed');
+                        }
+                        // Jika salah satu kondisi benar -> collapse saat halaman load
+                        if (isCollapsed) {
+                            aside.classList.add('collapsed');
+                        }
+
+
 
                     } catch (e) {
                         console.warn('localStorage not available:', e);

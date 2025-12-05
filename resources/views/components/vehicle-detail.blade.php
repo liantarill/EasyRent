@@ -1,4 +1,4 @@
-@props(['vehicle'])
+@props(['vehicle', 'rentDate' => null, 'returnDate' => null])
 
 @php
     $customer = auth()->user();
@@ -145,7 +145,7 @@
                         </div>
 
                         @if ($canRent)
-                            @if (!$vehicle->is_rented)
+                            @if (!$vehicle->is_rented && $rentDate && $returnDate)
                                 <form action="{{ route('customer.rents.create', $vehicle->id) }}" method="GET">
                                     <button type="submit"
                                         class="w-full px-4 py-2.5 sm:py-3 rounded-lg font-semibold text-white text-sm sm:text-base transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md"
