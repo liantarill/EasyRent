@@ -5,10 +5,15 @@
     $COLLAPSED_KEY = $id . '_collapsed';
 @endphp
 
-<aside id="{{ $id }}"
-    class="z-20 w-full min-h-screen hidden lg:flex lg:w-72 lg:fixed  top-0   h-fit transition-all duration-200 ease-in-out">
+<!-- Mobile Toggle Button - OUTSIDE the sliding container -->
+<button id="{{ $id }}_MobileToggle" type="button"
+    class="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 bg-primary-main text-white rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all duration-200 flex items-center justify-center">
+    <i class="fas fa-filter text-xl"></i>
+</button>
 
-    <div class="bg-white border overflow-visible border-gray-100 pt-25  shadow-sm relative">
+<aside id="{{ $id }}" class="z-20 min-h-screen flex w-72 fixed top-0 h-fit ">
+
+    <div class="bg-white border overflow-visible border-gray-100 pt-25 shadow-sm relative">
         <!-- Header -->
         <div class="flex items-center justify-between gap-2 p-4 border-b border-gray-100">
             <div class="flex items-center gap-2">
@@ -116,11 +121,20 @@
 @once
     @push('styles')
         <style>
-            /* Collapsed state */
-            [id^="vehicleFilter_"].collapsed {
-                width: 64px !important;
-                min-width: 64px !important;
-                max-width: 64px !important;
+            /* Desktop: Collapsed state */
+            @media (min-width: 1024px) {
+                [id^="vehicleFilter_"].collapsed {
+                    width: 64px !important;
+                    min-width: 64px !important;
+                    max-width: 64px !important;
+                }
+            }
+
+            /* Mobile: Slide completely off-screen when collapsed */
+            @media (max-width: 1023px) {
+                [id^="vehicleFilter_"].collapsed {
+                    transform: translateX(-100%) !important;
+                }
             }
 
             [id^="vehicleFilter_"].collapsed .hide-when-collapsed {
@@ -145,7 +159,7 @@
 
             /* Smooth transitions */
             [id^="vehicleFilter_"] {
-                transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out, max-width 0.3s ease-in-out;
+                transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out, max-width 0.3s ease-in-out, transform 0.3s ease-in-out;
             }
 
             [id^="vehicleFilter_"] .hide-when-collapsed {
@@ -174,6 +188,7 @@
                     const COLLAPSED_KEY = id + '_collapsed';
 
                     const toggleBtn = document.getElementById(id + '_ToggleBtn');
+                    const mobileBtn = document.getElementById(id + '_MobileToggle');
 
                     if (!toggleBtn) {
                         console.warn('Toggle button not found for', id);
@@ -182,17 +197,6 @@
 
                     // Apply state from localStorage
                     try {
-                        // const isCollapsed = localStorage.getItem(COLLAPSED_KEY) === '1';
-                        // if (isCollapsed) {
-                        //     aside.classList.add('collapsed');
-                        // }
-
-
-                        // Ambil state dari localStorage + kondisi URL (rent/return)
-                        // const isCollapsed =
-                        //     localStorage.getItem(COLLAPSED_KEY) === '1' ||
-                        //     window.shouldCollapseFilter === true;
-
                         let stored = localStorage.getItem(COLLAPSED_KEY);
 
                         // DEFAULT = collapsed
@@ -202,13 +206,6 @@
                         if (isCollapsed) {
                             aside.classList.add('collapsed');
                         }
-                        // Jika salah satu kondisi benar -> collapse saat halaman load
-                        if (isCollapsed) {
-                            aside.classList.add('collapsed');
-                        }
-
-
-
                     } catch (e) {
                         console.warn('localStorage not available:', e);
                     }
@@ -244,6 +241,14 @@
                         const isCurrentlyCollapsed = aside.classList.contains('collapsed');
                         setCollapsed(!isCurrentlyCollapsed);
                     });
+
+                    // Mobile button click
+                    if (mobileBtn) {
+                        mobileBtn.addEventListener('click', function() {
+                            const isCurrentlyCollapsed = aside.classList.contains('collapsed');
+                            setCollapsed(!isCurrentlyCollapsed);
+                        });
+                    }
 
                     // Optional: double-click on header to toggle
                     const header = aside.querySelector('.fa-filter')?.closest('div');
