@@ -20,10 +20,6 @@
                         <p class="text-slate-600 text-sm font-medium">Pantau dan kelola semua transaksi rental kendaraan
                             secara real-time</p>
                     </div>
-                    <a href="{{ route('admin.rents.create') }}"
-                        class="mt-4 md:mt-0 px-6 py-2.5 bg-primary-main hover:bg-primary-dark text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
-                        <i class="fas fa-plus text-sm"></i> Tambah
-                    </a>
                 </div>
 
                 <!-- Stats Cards - Compact -->
