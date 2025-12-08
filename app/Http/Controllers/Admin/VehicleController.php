@@ -108,8 +108,9 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Vehicle $vehicle)
     {
-        //
+        $vehicle->delete();
+        return redirect()->back()->with('success', 'Kendaraan berhasil dihapus.');
     }
 }

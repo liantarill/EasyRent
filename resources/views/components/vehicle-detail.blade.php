@@ -1,4 +1,4 @@
-@props(['vehicle'])
+@props(['vehicle', 'rentDate' => null, 'returnDate' => null])
 
 @php
     $customer = auth()->user();
@@ -136,27 +136,31 @@
                             <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $vehicle->formatted_price }}</p>
                         </div>
                         <div class="mb-4">
-                            <span class="inline-block px-3 py-1 rounded text-xs font-semibold"
-                                style="background-color: #ccfbf1; color: #0d9488;">
-                                {{ $vehicle->status }}
+                            <span
+                                class="inline-block px-3 py-1 rounded text-xs font-semibold 
+                            {{ $vehicle->is_rented > 0 ? 'text-red-700 bg-red-200' : 'text-primary-main bg-primary-accent ' }}">
+                                {{-- style="background-color: #ccfbf1; color: #0d9488;"> --}}
+                                {{ $vehicle->is_rented ? 'Rented' : 'Available' }}
                             </span>
                         </div>
 
                         @if ($canRent)
-                            <form action="{{ route('customer.rents.create', $vehicle->id) }}" method="GET">
-                                <button type="submit"
-                                    class="w-full px-4 py-2.5 sm:py-3 rounded-lg font-semibold text-white text-sm sm:text-base transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md"
-                                    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
-                                    <span class="flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z">
-                                            </path>
-                                        </svg>
-                                        Sewa Sekarang
-                                    </span>
-                                </button>
-                            </form>
+                            @if (!$vehicle->is_rented && $rentDate && $returnDate)
+                                <form action="{{ route('customer.rents.create', $vehicle->id) }}" method="GET">
+                                    <button type="submit"
+                                        class="w-full px-4 py-2.5 sm:py-3 rounded-lg font-semibold text-white text-sm sm:text-base transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md"
+                                        style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
+                                        <span class="flex items-center justify-center gap-2">
+                                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z">
+                                                </path>
+                                            </svg>
+                                            Sewa Sekarang
+                                        </span>
+                                    </button>
+                                </form>
+                            @endif
                         @else
                             <div class="rounded-lg border-l-4 p-3 sm:p-4 space-y-2"
                                 style="border-left-color: #f59e0b; background-color: #fffbeb; color: #78350f;">

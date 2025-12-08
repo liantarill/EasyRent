@@ -4,7 +4,7 @@
     class="border border-gray-100 rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300">
 
     <!-- Photo Section -->
-    <div class="relative h-40 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+    <div class="relative h-40 bg-linear-to-br from-gray-50 to-gray-100 overflow-hidden">
         @if ($vehicle->photo)
             <img src="{{ asset('storage/' . $vehicle->photo) }}" alt="{{ $vehicle->brand }}"
                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
@@ -19,10 +19,17 @@
         @endif
 
         <!-- Updated badge styling with teal accent color -->
-        <div
+        {{-- <div
             class="absolute top-3 right-3 bg-primary-main text-white px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm">
             {{ ucfirst($vehicle->vehicle_type) }}
-        </div>
+        </div> --}}
+        @if ($rentDate && $returnDate)
+            <div
+                class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm text-white {{ $vehicle->is_rented > 0 ? 'bg-red-600' : 'bg-primary-main ' }}">
+                {{ $vehicle->is_rented > 0 ? 'Rented' : 'Available' }}
+            </div>
+        @endif
+
     </div>
 
     <!-- Content Section -->
@@ -64,7 +71,7 @@
             </p>
 
             <!-- Buttons in compact vertical layout -->
-            <div class="space-y-2">
+            <div class="space-y-2 ">
                 <!-- Detail Button -->
                 <a href="#" data-modal-target="vehicleDetailModal-{{ $vehicle->id }}"
                     class="block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md font-medium text-sm hover:bg-gray-200 transition text-center">
@@ -72,16 +79,18 @@
                 </a>
 
                 <!-- Rent Button -->
-                <form action="{{ route('customer.rents.store', $vehicle->id) }}" method="POST"
-                    @if (!$rentDate || !$returnDate) onsubmit="alert('Silakan pilih tanggal terlebih dahulu'); return false;" @endif>
-                    @csrf
-                    <input type="hidden" name="rent_date" value="{{ $rentDate }}">
-                    <input type="hidden" name="return_date" value="{{ $returnDate }}">
-                    <button type="submit"
-                        class="block w-full px-3 py-2 bg-primary-main text-white rounded-md font-medium text-sm hover:bg-primary-dark transition">
-                        <i class="fa-solid fa-car-side mr-1.5"></i> Sewa
-                    </button>
-                </form>
+                @if (!$vehicle->is_rented && $rentDate && $returnDate)
+                    <form action="{{ route('customer.rents.store', $vehicle->id) }}" method="POST"
+                        @if (!$rentDate || !$returnDate) onsubmit="alert('Silakan pilih tanggal terlebih dahulu'); return false;" @endif>
+                        @csrf
+                        <input type="hidden" name="rent_date" value="{{ $rentDate }}">
+                        <input type="hidden" name="return_date" value="{{ $returnDate }}">
+                        <button type="submit"
+                            class="btn-sewa block w-full px-3 py-2 bg-primary-main text-white rounded-md font-medium text-sm hover:bg-primary-dark transition">
+                            <i class="fa-solid fa-car-side mr-1.5"></i> Sewa
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

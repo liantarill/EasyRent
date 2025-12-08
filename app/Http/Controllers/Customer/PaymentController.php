@@ -177,12 +177,15 @@ class PaymentController extends Controller
                 }
             } elseif ($transactionStatus == 'settlement') {
                 $payment->update(['status' => 'Paid']);
-                // Update rent status to Verified
                 $payment->rent->update(['rent_status' => 'Verified']);
             } elseif ($transactionStatus == 'pending') {
                 $payment->update(['status' => 'Pending']);
-            } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+            } elseif (in_array($transactionStatus, ['deny', 'expire'])) {
                 $payment->update(['status' => 'Failed']);
+                $payment->rent->update(['rent_status' => 'Rejected']);
+            } elseif ($transactionStatus == 'cancel') {
+                $payment->update(['status' => 'Cancelled']);
+                $payment->rent->update(['rent_status' => 'Cancelled']);
             }
 
             return response()->json([
