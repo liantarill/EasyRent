@@ -16,14 +16,14 @@ class VehicleController extends Controller
     public function index(Request $request)
     {
         $validated = $request->validate([
-            'search'       => 'nullable|string',
-            'type'         => 'nullable|in:car,motorcycle',
+            'search' => 'nullable|string',
+            'type' => 'nullable|in:car,motorcycle',
             'transmission' => 'nullable|in:automatic,manual',
-            'rent_date'    => 'nullable|date',
-            'return_date'  => 'nullable|date|after_or_equal:rent_date',
+            'rent_date' => 'nullable|date',
+            'return_date' => 'nullable|date|after_or_equal:rent_date',
         ]);
 
-        $vehiclesQuery = Vehicle::query()->where('status', 'Available');
+        $vehiclesQuery = Vehicle::query();
 
         // Search
         if (!empty($validated['search'])) {
@@ -47,28 +47,38 @@ class VehicleController extends Controller
         }
 
         // Date filter
-        $rentDate   = $validated['rent_date'] ?? null;
+        $rentDate = $validated['rent_date'] ?? null;
         $returnDate = $validated['return_date'] ?? null;
 
         if ($rentDate && $returnDate) {
             $start = Carbon::parse($rentDate)->startOfDay();
-            $end   = Carbon::parse($returnDate)->endOfDay();
+            $end = Carbon::parse($returnDate)->endOfDay();
 
             $vehiclesQuery
-                ->withCount(['rents as is_rented' => function ($q) use ($start, $end) {
-                    $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
-                        ->where(function ($date) use ($start, $end) {
-                            $date->where('rent_date', '<=', $end)
-                                ->where('return_date', '>=', $start);
-                        });
-                }]);
+                ->withCount([
+                    'rents as is_rented' => function ($q) use ($start, $end) {
+                        $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
+                            ->where(function ($date) use ($start, $end) {
+                                $date->where('rent_date', '<=', $end)
+                                    ->where('return_date', '>=', $start);
+                            });
+                    }
+                ]);
         }
 
-        $vehicles = $vehiclesQuery->latest()->paginate(9)->withQueryString();
+        // Order by availability status - Available vehicles first, then others
+        $vehiclesQuery->orderByRaw("CASE
+            WHEN status = 'Available' THEN 1
+            WHEN status = 'Rented' THEN 2
+            WHEN status = 'Maintenance' THEN 3
+            ELSE 4
+        END");
+
+        $vehicles = $vehiclesQuery->paginate(9)->withQueryString();
 
         return view('customer.vehicles.index', [
             'vehicles' => $vehicles,
-            'filters'  => $validated,
+            'filters' => $validated,
         ]);
     }
 

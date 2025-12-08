@@ -36,14 +36,14 @@ class RentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id'              => 'required|uuid|exists:users,id',
-            'approved_by'          => 'nullable|uuid|exists:users,id',
-            'vehicle_id'           => 'required|exists:vehicles,id',
-            'rent_date'            => 'required|date',
-            'return_date'          => 'required|date|after_or_equal:rent_date',
+            'user_id' => 'required|uuid|exists:users,id',
+            'approved_by' => 'nullable|uuid|exists:users,id',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'rent_date' => 'required|date',
+            'return_date' => 'required|date|after_or_equal:rent_date',
             'daily_price_snapshot' => 'required|numeric|min:0',
-            'total_price'          => 'required|numeric|min:0',
-            'rent_status'          => 'required|in:Pending Verification,Verified,Rejected',
+            'total_price' => 'required|numeric|min:0',
+            'rent_status' => 'required|in:Pending Verification,Verified,Rejected',
         ]);
 
 
@@ -84,6 +84,12 @@ class RentController extends Controller
 
         if ($request->rent_status === 'Verified') {
             $data['approved_by'] = Auth::id();
+            // Update vehicle status to Rented when rent is verified
+            $rent->vehicle->update(['status' => 'Rented']);
+        } elseif ($request->rent_status === 'Rejected') {
+            $data['approved_by'] = null;
+            // Update vehicle status to Available when rent is rejected
+            $rent->vehicle->update(['status' => 'Available']);
         } else {
             $data['approved_by'] = null;
         }

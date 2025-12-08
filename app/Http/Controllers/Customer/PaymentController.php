@@ -93,7 +93,7 @@ class PaymentController extends Controller
                 'customer_details' => [
                     'first_name' => \Auth::user()->name,
                     'email' => \Auth::user()->email,
-                    'phone' => \Auth::user()->phone_number ?? '0',
+                    'phone' => \Auth::user()->phone_number ?? '0',z
                 ],
                 'item_details' => [
                     [
@@ -166,6 +166,8 @@ class PaymentController extends Controller
             // Update payment status
             $payment->update(['status' => 'Cancelled']);
             $payment->rent->update(['rent_status' => 'Cancelled']);
+            // Update vehicle status to Available
+            $payment->rent->vehicle->update(['status' => 'Available']);
 
             return back()->with('success', 'Payment berhasil dibatalkan.');
         } catch (\Exception $e) {
@@ -210,18 +212,26 @@ class PaymentController extends Controller
                     $payment->update(['status' => 'Paid']);
                     // Update rent status to Verified
                     $payment->rent->update(['rent_status' => 'Verified']);
+                    // Update vehicle status to Rented
+                    $payment->rent->vehicle->update(['status' => 'Rented']);
                 }
             } elseif ($transactionStatus == 'settlement') {
                 $payment->update(['status' => 'Paid']);
                 $payment->rent->update(['rent_status' => 'Verified']);
+                // Update vehicle status to Rented
+                $payment->rent->vehicle->update(['status' => 'Rented']);
             } elseif ($transactionStatus == 'pending') {
                 $payment->update(['status' => 'Pending']);
             } elseif (in_array($transactionStatus, ['deny', 'expire'])) {
                 $payment->update(['status' => 'Failed']);
                 $payment->rent->update(['rent_status' => 'Rejected']);
+                // Update vehicle status to Available
+                $payment->rent->vehicle->update(['status' => 'Available']);
             } elseif ($transactionStatus == 'cancel') {
                 $payment->update(['status' => 'Cancelled']);
                 $payment->rent->update(['rent_status' => 'Cancelled']);
+                // Update vehicle status to Available
+                $payment->rent->vehicle->update(['status' => 'Available']);
             }
 
             return response()->json([

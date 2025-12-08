@@ -25,8 +25,11 @@
         </div> --}}
         @if ($rentDate && $returnDate)
             <div
-                class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm text-white {{ $vehicle->is_rented > 0 ? 'bg-red-600' : 'bg-primary-main ' }}">
-                {{ $vehicle->is_rented > 0 ? 'Rented' : 'Available' }}
+                class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm text-white {{
+                    $vehicle->status === 'Available' ? 'bg-primary-main' :
+                    ($vehicle->status === 'Maintenance' ? 'bg-yellow-600' : 'bg-red-600')
+                }}">
+                {{ $vehicle->status }}
             </div>
         @endif
 
@@ -79,7 +82,7 @@
                 </a>
 
                 <!-- Rent Button -->
-                @if (!$vehicle->is_rented && $rentDate && $returnDate)
+                @if (!$vehicle->is_rented && $vehicle->status === 'Available' && $rentDate && $returnDate)
                     <form action="{{ route('customer.rents.store', $vehicle->id) }}" method="POST"
                         @if (!$rentDate || !$returnDate) onsubmit="alert('Silakan pilih tanggal terlebih dahulu'); return false;" @endif>
                         @csrf
