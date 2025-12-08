@@ -92,9 +92,12 @@
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-100">
                                         @foreach ($transactions as $item)
-                                            @php $statusClass = 'tag-' . strtolower($item['status']); @endphp
+                                            @php
+                                                $statusClass = 'tag-' . strtolower($item['status'] ?? '');
+                                                $payment = $item->payment;
+                                            @endphp
                                             <tr>
-                                                <td class="px-4 py-3">{{ $item->payment->order_id }}</td>
+                                                <td class="px-4 py-3">{{ $payment->order_id ?? 'N/A' }}</td>
                                                 <td class="px-4 py-3">{{ $item->user->name }}</td>
                                                 <td class="px-4 py-3">{{ $item->vehicle->brand }}</td>
                                                 <td class="px-4 py-3">
