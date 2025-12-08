@@ -18,65 +18,101 @@ class PaymentController extends Controller
     // public function __construct() {}
     public function checkout(Rent $rent)
     {
+        // Validasi bahwa rental milik user yang sedang login
+        if ($rent->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to rental.');
+        }
+
+        // Cek apakah rental sudah memiliki payment yang sudah paid
+        $paidPayment = Payment::where('rent_id', $rent->id)
+            ->where('status', 'Paid')
+            ->first();
+
+        if ($paidPayment) {
+            return redirect()->route('customer.rents.show', $rent)
+                ->with('info', 'Pembayaran untuk rental ini sudah selesai.');
+        }
+
         // Set Midtrans configuration
         Config::$serverKey = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
+        // CEK PAYMENT YANG SUDAH ADA - Lebih ketat untuk mencegah duplikasi
+        $existingPayment = Payment::where('rent_id', $rent->id)
+            ->whereIn('status', ['Pending', 'Pending Payment'])
+            ->where('created_at', '>', now()->subHours(24)) // Hanya payment dalam 24 jam terakhir
+            ->first();
 
-        // CEK PAYMENT YANG SUDAH ADA
-        $payment = Payment::where('rent_id', $rent->id)->first();
-
-        // Jika payment sudah ada dan masih pending, gunakan yang lama
-        if ($payment && $payment->status === 'Pending') {
-            // Cek apakah snap token masih valid (belum kadaluarsa)
-            if ($payment->snap_token && $payment->created_at->addHours(24) > now()) {
-                // Gunakan payment yang sudah ada
+        // Jika ada payment yang masih aktif dan belum expired, gunakan yang ada
+        if ($existingPayment) {
+            // Cek apakah snap token masih valid
+            if ($existingPayment->snap_token && $existingPayment->created_at->addHours(24) > now()) {
                 return view('customer.payments.checkout', [
                     'rent' => $rent,
-                    'snapToken' => $payment->snap_token,
-                    'payment' => $payment
+                    'snapToken' => $existingPayment->snap_token,
+                    'payment' => $existingPayment
                 ]);
             }
         }
 
-        $orderId = 'RENT-' . $rent->id . '-' . time();
+        // Gunakan database transaction dan lock untuk mencegah race condition
+        $result = \DB::transaction(function () use ($rent) {
+            // Lock the rent record to prevent concurrent access
+            $lockedRent = Rent::where('id', $rent->id)->lockForUpdate()->first();
 
+            // Double check - pastikan tidak ada payment aktif lainnya
+            $duplicateCheck = Payment::where('rent_id', $rent->id)
+                ->whereIn('status', ['Pending', 'Pending Payment'])
+                ->where('created_at', '>', now()->subMinutes(5)) // Dalam 5 menit terakhir
+                ->exists();
 
-        // Create or update payment record
-        $payment = Payment::updateOrCreate(
-            ['rent_id' => $rent->id],
-            [
+            if ($duplicateCheck) {
+                throw new \Exception('Payment already exists for this rental');
+            }
+
+            $orderId = 'RENT-' . $rent->id . '-' . time() . '-' . rand(100, 999);
+
+            // Create new payment record
+            $payment = Payment::create([
+                'rent_id' => $rent->id,
                 'order_id' => $orderId,
                 'status' => 'Pending',
                 'amount' => $rent->total_price,
-            ]
-        );
-        $totalDays = $rent->total_price / $rent->daily_price_snapshot;
-        $params = [
-            'transaction_details' => [
-                'order_id' => $orderId,
-                'gross_amount' => (int) $rent->total_price,
-            ],
-            'customer_details' => [
-                'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-                'phone' => Auth::user()->phone_number ?? '0',
-            ],
-            'item_details' => [
-                [
-                    'id' => 'VEHICLE-' . $rent->vehicle_id,
-                    'price' => (int) $rent->total_price,
-                    'quantity' => 1,
-                    'name' => $rent->vehicle->brand . ' Rental (' . $totalDays . ' days)',
+                'method' => 'midtrans'
+            ]);
 
+            // Calculate total days and create Midtrans params inside transaction
+            $totalDays = $rent->total_price / $rent->daily_price_snapshot;
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => (int) $rent->total_price,
+                ],
+                'customer_details' => [
+                    'first_name' => \Auth::user()->name,
+                    'email' => \Auth::user()->email,
+                    'phone' => \Auth::user()->phone_number ?? '0',
+                ],
+                'item_details' => [
+                    [
+                        'id' => 'VEHICLE-' . $rent->vehicle_id,
+                        'price' => (int) $rent->total_price,
+                        'quantity' => 1,
+                        'name' => $rent->vehicle->brand . ' Rental (' . $totalDays . ' days)',
+                    ]
+                ],
+                'callbacks' => [
+                    'finish' => route('customer.payments.finish', $payment->id),
                 ]
-            ],
-            'callbacks' => [
-                'finish' => route('customer.payments.finish', $payment->id),
-            ]
-        ];
+            ];
+
+            return ['payment' => $payment, 'params' => $params];
+        });
+
+        $payment = $result['payment'];
+        $params = $result['params'];
         // dd($params);
         try {
             // Get Snap Token from Midtrans

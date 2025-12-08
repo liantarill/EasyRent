@@ -151,12 +151,19 @@
 
                             <!-- Payment Button -->
                             <button id="pay-button"
-                                class="w-full px-6 py-4 rounded-lg font-bold text-white text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl bg-linear-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
-                                <span class="flex items-center justify-center gap-3">
+                                class="w-full px-6 py-4 rounded-lg font-bold text-white text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl bg-linear-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="initiatePayment()">
+                                <span id="button-text" class="flex items-center justify-center gap-3">
                                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 010 2h3a1 1 0 011 1v3a1 1 0 01-2 0V6h-3a1 1 0 010-2zm0 8a1 1 0 010 2h3v2a1 1 0 102 0v-3a1 1 0 011-1h3a1 1 0 010 2h-3z" clip-rule="evenodd"/>
                                     </svg>
                                     Bayar Sekarang
+                                </span>
+                                <span id="loading-text" class="hidden flex items-center justify-center gap-3">
+                                    <svg class="w-5 h-5 animate-spin" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Memproses Pembayaran...
                                 </span>
                             </button>
 
