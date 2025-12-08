@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,13 +22,25 @@ class LoginController extends Controller
             'password' => 'required'
         ]);
 
-
-
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard')->with('success', 'Selamat datang, ' . $request->user()->username . '!');
+
+            $user = Auth::user(); // user yang login
+
+            if ($user->status === 'active') {
+                return redirect()->intended('dashboard')
+                    ->with('success', 'Selamat datang, ' . $user->username . '!');
+            }
+
+            // Jika user belum active → logout dan simpan session untuk OTP
+            session(['user_id' => $user->id]);
+
+            Auth::logout(); // logout benar-benar
+
+            return redirect()->route('verify.index', ['register'])
+                ->with('success', 'Selamat datang, ' . $user->username . '!');
         }
-        return back()->with('failed', 'Username atau Password Salah');
+        return back()->withInput($request->only('email'))->with('failed', 'Username atau Password Salah');
     }
 
     public function logout(Request $request)

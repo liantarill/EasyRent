@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -25,21 +26,21 @@ class RegisterController extends Controller
             'password' => 'required|min:8'
         ]);
 
+        $request['status'] = 'verify';
         $user = User::create([
             'id' => Str::uuid(),
             'username' => $request->username,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'phone_number' => $request->phone_number ?? null,
             'role' => 'customer',
         ]);
 
-        if (!$user) {
-            return redirect()->back()->with(['error' => 'Data tidak ditemukan!']);
-        } else {
-            return redirect()->route('dashboard')->with(['success' => 'Registrasi berhasil!']);
-            dd($request->all());
-        }
+        // Auth::login($user);
+        // // $request->session()->regenerate();
+        session([
+            'user_id' => $user->id
+        ]);
+        return redirect()->route('profile-completion');
     }
 }

@@ -11,11 +11,11 @@ class Payment extends Model
 
     protected $fillable = [
         'rent_id',
-        'amount',
+        'order_id',
+        'snap_token',
         'method',
-        'status',
-        'payment_proof',
-        'verified_by'
+        'amount',
+        'status'
     ];
 
     public function rent()

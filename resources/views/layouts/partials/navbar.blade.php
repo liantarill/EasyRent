@@ -1,18 +1,34 @@
-<nav id="nav" class="fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
+<nav id="nav"
+    class="bg-white/70 backdrop-blur-md border-b border-primary-main/10 fixed top-0 right-0 left-0 z-50 transition-all duration-150 ease-linear">
     <div class="flex justify-between items-center px-6 md:px-16 py-5">
-        <a href="/"
-            class="text-white font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
+        <a href="/" id="logo"
+            class=" text-black font-black text-2xl tracking-widest hover:text-primary-light transition-colors duration-300">
             EASY<span class="text-primary-main">RENT</span>
         </a>
 
-        @auth
+@auth
+            @php
+                $activeClass = 'text-primary-main font-semibold underline underline-offset-4';
+                $inactiveClass = 'text-gray-500 hover:text-primary-main';
+            @endphp
             <div class="hidden md:flex items-center space-x-1">
-                <a href="{{ route('admin.dashboard') }}"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Home</a>
-                <a href="{{ route('admin.rents.index') }}"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Rents</a>
-                <a href="{{ route('admin.vehicles.index') }}"
-                    class="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 font-medium">Vehicles</a>
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">Dashboard</a>
+                    <a href="{{ route('admin.rents.index') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.rents.*') ? $activeClass : $inactiveClass }}">Rents</a>
+                    <a href="{{ route('admin.vehicles.index') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('admin.vehicles.*') ? $activeClass : $inactiveClass }}">Vehicles</a>
+                @else
+                    <a href="{{ route('customer.dashboard') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.dashboard') ? $activeClass : $inactiveClass }}">Dashboard</a>
+                    <a href="{{ route('customer.vehicles.index') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.vehicles.*') ? $activeClass : $inactiveClass }}">Vehicles</a>
+                    <a href="{{ route('customer.rents.index') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.rents.*') ? $activeClass : $inactiveClass }}">Transactions</a>
+                    <a href="{{ route('customer.profile') }}"
+                        class="px-4 py-2 transition-colors duration-300 font-medium {{ request()->routeIs('customer.profile') ? $activeClass : $inactiveClass }}">Profile</a>
+                @endif
             </div>
         @endauth
 
@@ -28,8 +44,8 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}"
-                    class="px-5 py-2 text-gray-300 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
+                <a href="{{ route('login') }}" id="loginBtn"
+                    class="px-5 py-2 hover:text-primary-light transition-colors duration-300 font-medium text-sm">
                     Login
                 </a>
                 <a href="{{ route('register') }}"
@@ -40,7 +56,7 @@
         </div>
 
         <button id="mobileMenuBtn"
-            class="md:hidden text-white text-2xl hover:text-primary-light transition-colors duration-300">
+            class="md:hidden text-black text-2xl hover:text-primary-light transition-colors duration-300">
             {{-- ☰ --}}
             <i class="fa-solid fa-bars"></i>
         </button>
@@ -51,12 +67,27 @@
         <div class="px-6 py-6 space-y-4">
 
             @auth
-                <a href="/"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Home</a>
-                <a href="/rents"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Rents</a>
-                <a href="/vehicles"
-                    class="block py-3 text-gray-300 hover:text-primary-light transition-colors duration-200 font-medium border-b border-white/5">Vehicles</a>
+                @php
+                    $mobileActive = 'text-primary-main font-semibold';
+                    $mobileInactive = 'text-gray-500 hover:text-primary-main';
+                @endphp
+                @if (Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.dashboard') ? $mobileActive : $mobileInactive }}">Dashboard</a>
+                    <a href="{{ route('admin.rents.index') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.rents.*') ? $mobileActive : $mobileInactive }}">Rents</a>
+                    <a href="{{ route('admin.vehicles.index') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('admin.vehicles.*') ? $mobileActive : $mobileInactive }}">Vehicles</a>
+                @else
+                    <a href="{{ route('customer.dashboard') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.dashboard') ? $mobileActive : $mobileInactive }}">Dashboard</a>
+                    <a href="{{ route('customer.vehicles.index') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.vehicles.*') ? $mobileActive : $mobileInactive }}">Vehicles</a>
+                    <a href="{{ route('customer.rents.index') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.rents.*') ? $mobileActive : $mobileInactive }}">Transactions</a>
+                    <a href="{{ route('customer.profile') }}"
+                        class="block py-3 transition-colors duration-200 font-medium border-b border-white/5 {{ request()->routeIs('customer.profile') ? $mobileActive : $mobileInactive }}">Profile</a>
+                @endif
 
                 <div class="pt-4 mt-2 border-t border-primary-main/20">
                     <span class="block text-gray-400 text-sm mb-4">{{ Auth::user()->name }}</span>
@@ -70,7 +101,7 @@
                 </div>
             @else
                 <a href="/login"
-                    class="block w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg text-center transition-all duration-300 font-medium uppercase tracking-wide text-sm border border-white/10">
+                    class="block w-full py-3 bg-gray-100/50 b hover:bg-gray-100/90 text-black rounded-lg text-center transition-all duration-300 font-medium uppercase tracking-wide text-sm border border-black/20">
                     Login
                 </a>
                 <a href="{{ route('register') }}"
@@ -100,14 +131,39 @@
         }
     });
 
+    // const nav = document.getElementById('nav');
+    // const logo = document.getElementById('logo');
+    // const loginBtn = document.getElementById('loginBtn');
 
-    const nav = document.getElementById('nav');
+    // function handleNav() {
+    //     if (window.innerWidth >= 768) {
+    //         if (window.scrollY < 150) {
+    //             nav.classList.remove('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //             logo.classList.remove('text-gray-950');
+    //             logo.classList.add('text-white');
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY < 150) {
-            nav.classList.remove('bg-black/60', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
-        } else {
-            nav.classList.add('bg-black/60', 'backdrop-blur-lg', 'border-b', 'border-primary-main/10');
-        }
-    });
+    //             loginBtn.classList.add('text-white');
+    //             loginBtn.classList.remove('text-black');
+    //         } else {
+    //             nav.classList.add('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //             logo.classList.add('text-gray-950');
+    //             logo.classList.remove('text-white');
+
+    //             loginBtn.classList.remove('text-white');
+    //             loginBtn.classList.add('text-black');
+    //         }
+    //     } else {
+    //         nav.classList.add('bg-white/70', 'backdrop-blur-md', 'border-b', 'border-primary-main/10');
+    //         logo.classList.add('text-black');
+    //     }
+    // }
+
+    // // Jalankan saat scroll
+    // window.addEventListener('scroll', handleNav);
+
+    // // Jalankan saat resize
+    // window.addEventListener('resize', handleNav);
+
+    // // Jalankan sekali saat page load
+    // handleNav();
 </script>

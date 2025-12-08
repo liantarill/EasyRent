@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VehicleController extends Controller
 {
@@ -30,7 +31,7 @@ class VehicleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'brand'         => 'required|string|',
             'year'          => 'required|integer|',
             'plate_number'  => 'required|string|unique:vehicles,plate_number',
@@ -44,7 +45,12 @@ class VehicleController extends Controller
             'status'        => 'required|in:Available,Rented,Maintenance',
         ]);
 
-        Vehicle::create($request->all());
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('vehicles', 'public');
+            $validated['photo'] = $path;
+        }
+
+        Vehicle::create($validated);
 
         return redirect()->route('admin.vehicles.index')->with('success', 'Vehicle created.');
     }
@@ -70,7 +76,7 @@ class VehicleController extends Controller
      */
     public function update(Request $request, Vehicle $vehicle)
     {
-        $request->validate([
+        $validated = $request->validate([
             'brand'         => 'required|string|',
             'year'          => 'required|integer|',
             'plate_number'  => 'required|string|unique:vehicles,plate_number,' . $vehicle->id,
@@ -84,8 +90,17 @@ class VehicleController extends Controller
             'status'        => 'required|in:Available,Rented,Maintenance',
         ]);
 
+        if ($request->hasFile('photo')) {
+            if ($vehicle->photo && Storage::disk('public')->exists($vehicle->photo)) {
+                Storage::disk('public')->delete($vehicle->photo);
+            }
 
-        $vehicle->update($request->all());
+            $path = $request->file('photo')->store('vehicles', 'public');
+            $validated['photo'] = $path;
+        }
+
+
+        $vehicle->update($validated);
 
         return redirect()->route('admin.vehicles.index')->with('success', 'Vehicle updated.');
     }
@@ -93,8 +108,9 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Vehicle $vehicle)
     {
-        //
+        $vehicle->delete();
+        return redirect()->back()->with('success', 'Kendaraan berhasil dihapus.');
     }
 }

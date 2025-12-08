@@ -19,6 +19,11 @@ class Rent extends Model
         'total_price',
         'rent_status',
     ];
+    protected $casts = [
+        'rent_date' => 'date',
+        'return_date' => 'date',
+    ];
+
 
     public function user()
     {
@@ -32,7 +37,7 @@ class Rent extends Model
 
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class, 'vehicle_id');
+        return $this->belongsTo(Vehicle::class, 'vehicle_id')->withTrashed();
     }
 
     public function payment()
