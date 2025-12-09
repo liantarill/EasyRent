@@ -93,7 +93,7 @@ class PaymentController extends Controller
                 'customer_details' => [
                     'first_name' => \Auth::user()->name,
                     'email' => \Auth::user()->email,
-                    'phone' => \Auth::user()->phone_number ?? '0',z
+                    'phone' => \Auth::user()->phone_number ?? '0',
                 ],
                 'item_details' => [
                     [
