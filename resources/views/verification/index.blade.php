@@ -1,148 +1,124 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('layouts.partials.navbar')
+    <div class="min-h-screen bg-bg flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-6xl">
+            <!-- Main Container with Two Columns -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white rounded-xl overflow-hidden shadow-2xl">
 
-    <div>
-        <!-- Hero Section -->
-        <section
-            class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-linear-to-br from-teal-50 via-white to-teal-50">
-            <div class="relative max-w-7xl mx-auto">
-                <div class="flex items-center gap-4 mb-6">
-                    <div
-                        class="w-12 h-12 rounded-full bg-linear-to-br from-primary-main to-primary-dark flex items-center justify-center shadow-lg">
-                        <i class="fas fa-car text-white text-lg"></i>
+                <!-- Left: Dark Overlay Section -->
+                <div
+                    class="hidden lg:flex relative overflow-hidden bg-linear-to-br from-gray-900 via-gray-800 to-gray-900 items-center justify-center p-12">
+                    <!-- Added dark overlay background with branded content section -->
+
+                    <!-- Background Pattern -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div
+                            class="absolute top-0 left-0 w-96 h-96 bg-primary-main rounded-full mix-blend-multiply filter blur-3xl">
+                        </div>
+                        <div
+                            class="absolute bottom-0 right-0 w-96 h-96 bg-primary-dark rounded-full mix-blend-multiply filter blur-3xl">
+                        </div>
                     </div>
-                    <h1 class="text-sm font-bold tracking-widest uppercase text-primary-main">Kendaraan Kami</h1>
+
+                    <!-- Content -->
+                    <div class="relative z-10 text-center lg:text-left">
+                        <div class="mb-4 inline-block lg:block">
+                            <span class="text-primary-light font-bold text-sm tracking-widest uppercase">Security
+                                Verified</span>
+                        </div>
+                        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+                            Verify Your Identity
+                        </h1>
+                        <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+                            We'll send a one-time password to your email. This keeps your account secure and protected.
+                        </p>
+
+
+                    </div>
                 </div>
 
-                <h2 class="text-5xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
-                    Daftar Kendaraan Tersedia
-                </h2>
-                <p class="text-lg text-gray-600 max-w-2xl font-light">
-                    Temukan kendaraan impian Anda dengan berbagai pilihan tipe dan transmisi.
-                </p>
-            </div>
-        </section>
+                <!-- Right: Form Section -->
+                <div class="flex flex-col justify-center p-8 lg:p-12">
+                    <!-- Clean white form area with teal accents -->
 
-        <!-- Main Content -->
-        <div class="bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <!-- Sidebar Filters -->
-                    <aside class="w-full lg:w-72 lg:sticky lg:top-24 h-fit">
-                        <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow"
-                            style="background: var(--color-bg);">
-                            <div class="flex items-center gap-2 mb-5">
-                                <i class="fas fa-filter text-primary-main text-lg"></i>
-                                <h2 class="text-lg font-bold text-gray-900">Filter Pencarian</h2>
-                            </div>
-
-                            <form method="GET" class="space-y-5">
-                                <!-- Search -->
-                                <div>
-                                    <label for="search" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-search text-primary-main mr-2"></i>Cari Kendaraan
-                                    </label>
-                                    <input type="text" id="search" name="search"
-                                        value="{{ $filters['search'] ?? '' }}" placeholder="Merek / Plat Nomor"
-                                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-transparent transition" />
-                                </div>
-
-                                <!-- Hidden Date Inputs -->
-                                <input type="hidden" id="rent_date" name="rent_date"
-                                    value="{{ $filters['rent_date'] ?? '' }}">
-                                <input type="hidden" id="return_date" name="return_date"
-                                    value="{{ $filters['return_date'] ?? '' }}">
-
-                                <!-- Date Range -->
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-calendar text-primary-main mr-2"></i>Tanggal Sewa
-                                    </label>
-                                    <button type="button" id="dateRangeBtn"
-                                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-left text-sm bg-white hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-primary-main">
-                                        <span id="dateRangeDisplay" class="text-gray-600 font-medium">
-                                            @if (($filters['rent_date'] ?? '') && ($filters['return_date'] ?? ''))
-                                                {{ \Carbon\Carbon::parse($filters['rent_date'])->format('d M Y') }}
-
-                                                {{ \Carbon\Carbon::parse($filters['return_date'])->format('d M Y') }}
-                                            @else
-                                                Pilih Tanggal Sewa
-                                            @endif
-                                        </span>
-                                    </button>
-                                </div>
-
-                                <!-- Type Filter -->
-                                <div>
-                                    <label for="type" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-cube text-primary-main mr-2"></i>Tipe Kendaraan
-                                    </label>
-                                    <select id="type" name="type"
-                                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-transparent transition bg-white">
-                                        <option value="">Semua Tipe</option>
-                                        <option value="car" @selected(($filters['type'] ?? '') === 'car')>Mobil</option>
-                                        <option value="motorcycle" @selected(($filters['type'] ?? '') === 'motorcycle')>Motor</option>
-                                    </select>
-                                </div>
-
-                                <!-- Transmission Filter -->
-                                <div>
-                                    <label for="transmission" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        <i class="fas fa-cog text-primary-main mr-2"></i>Transmisi
-                                    </label>
-                                    <select id="transmission" name="transmission"
-                                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-main focus:border-transparent transition bg-white">
-                                        <option value="">Semua</option>
-                                        <option value="automatic" @selected(($filters['transmission'] ?? '') === 'automatic')>Automatic</option>
-                                        <option value="manual" @selected(($filters['transmission'] ?? '') === 'manual')>Manual</option>
-                                    </select>
-                                </div>
-
-                                <!-- Actions -->
-                                <div class="flex items-center gap-3 pt-2">
-                                    <button type="submit"
-                                        class="flex-1 px-4 py-2.5 rounded-lg bg-linear-to-r from-primary-main to-primary-dark text-white font-semibold hover:shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary-light transition">
-                                        <i class="fas fa-check mr-2"></i>Filter
-                                    </button>
-                                    <a href="{{ route('customer.vehicles.index') }}"
-                                        class="px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-700 bg-white hover:bg-gray-50 active:scale-95 transition font-medium">
-                                        <i class="fas fa-redo mr-1"></i>Reset
-                                    </a>
-                                </div>
-                            </form>
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <div class="inline-flex items-center gap-2 mb-4 px-3 py-1 bg-primary-accent rounded-full">
+                            <div class="w-2 h-2 rounded-full bg-primary-main"></div>
+                            <span class="text-xs font-semibold text-primary-dark uppercase tracking-wider">Step 1 of
+                                2</span>
                         </div>
-                    </aside>
+                        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                            Send Verification Code
+                        </h2>
+                        <p class="text-gray-600 text-base">We'll send a secure one-time password to your email address.</p>
+                    </div>
 
-                    <!-- Main Grid -->
-                    <main class="flex-1">
-                        @if ($vehicles->isEmpty())
-                            <div
-                                class="border-dashed border-2 border-gray-300 p-12 rounded-2xl bg-linear-to-br from-gray-50 to-white text-center">
-                                <i class="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
-                                <strong class="text-lg text-gray-900 block">Tidak ada kendaraan yang cocok.</strong>
-                                <p class="text-sm text-gray-600 mt-2">Ubah filter atau hubungi admin untuk ketersediaan
-                                    terbaru.</p>
-                            </div>
-                        @else
-                            <!-- Vehicle Grid -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                @foreach ($vehicles as $vehicle)
-                                    <x-vehicle-card :vehicle="$vehicle" :rent_date="$filters['rent_date'] ?? null" :return_date="$filters['return_date'] ?? null" />
+                    <!-- Error Messages -->
+                    @if ($errors->any())
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p class="text-sm font-semibold text-red-800 mb-2">Please correct the following errors:</p>
+                            <ul class="space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li class="text-sm text-red-700">{{ $error }}</li>
                                 @endforeach
-                            </div>
+                            </ul>
+                        </div>
+                    @endif
 
-                            <!-- Pagination -->
-                            <div class="mt-10">
-                                {{ $vehicles->withQueryString()->links() }}
-                            </div>
-                        @endif
-                    </main>
+                    @if (session('failed'))
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p class="text-sm text-red-700">{{ session('failed') }}</p>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p class="text-sm text-red-700">{{ session('error') }}</p>
+                        </div>
+                    @endif
+
+                    <!-- Form -->
+                    <form action="{{ route('verify.store') }}" method="POST" class="space-y-6">
+                        @csrf
+                        <input type="hidden" name="type" value="{{ $type }}">
+
+                        <!-- Info Box -->
+                        <div class="bg-primary-accent rounded-lg p-4 border border-primary-light">
+                            <p class="text-sm text-gray-700">
+                                <span class="font-semibold text-gray-900">Verification will be sent to:</span><br>
+                                <span
+                                    class="text-primary-dark font-medium mt-1 block">{{ session('email') ?? 'your registered email' }}</span>
+                            </p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full bg-primary-main hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Send Verification Code
+                        </button>
+
+                        <!-- Help Text -->
+                        <p class="text-xs text-gray-500 text-center">
+                            Your code will arrive within seconds. Check your spam folder if needed.
+                        </p>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="my-6 border-t border-gray-200"></div>
+
+                    <!-- Footer Link -->
+                    <p class="text-xs text-gray-600 text-center">
+                        Your data is encrypted and secure. <a href="#"
+                            class="text-primary-main hover:text-primary-dark font-semibold">Learn more</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-
-    <x-date-range-modal :rent-date="$filters['rent_date'] ?? ''" :return-date="$filters['return_date'] ?? ''" />
 @endsection
