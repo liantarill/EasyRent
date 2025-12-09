@@ -84,12 +84,6 @@ class RentController extends Controller
 
         if ($request->rent_status === 'Verified') {
             $data['approved_by'] = Auth::id();
-            // Update vehicle status to Rented when rent is verified
-            $rent->vehicle->update(['status' => 'Rented']);
-        } elseif ($request->rent_status === 'Rejected') {
-            $data['approved_by'] = null;
-            // Update vehicle status to Available when rent is rejected
-            $rent->vehicle->update(['status' => 'Available']);
         } else {
             $data['approved_by'] = null;
         }

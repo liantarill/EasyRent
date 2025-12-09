@@ -52,33 +52,23 @@ class VehicleController extends Controller
 
         if ($rentDate && $returnDate) {
             $start = Carbon::parse($rentDate)->startOfDay();
-            $end = Carbon::parse($returnDate)->endOfDay();
+            $end   = Carbon::parse($returnDate)->endOfDay();
 
             $vehiclesQuery
-                ->withCount([
-                    'rents as is_rented' => function ($q) use ($start, $end) {
-                        $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
-                            ->where(function ($date) use ($start, $end) {
-                                $date->where('rent_date', '<=', $end)
-                                    ->where('return_date', '>=', $start);
-                            });
-                    }
-                ]);
+                ->withCount(['rents as is_rented' => function ($q) use ($start, $end) {
+                    $q->whereIn('rent_status', ['Pending Verification', 'Verified'])
+                        ->where(function ($date) use ($start, $end) {
+                            $date->where('rent_date', '<=', $end)
+                                ->where('return_date', '>=', $start);
+                        });
+                }]);
         }
 
-        // Order by availability status - Available vehicles first, then others
-        $vehiclesQuery->orderByRaw("CASE
-            WHEN status = 'Available' THEN 1
-            WHEN status = 'Rented' THEN 2
-            WHEN status = 'Maintenance' THEN 3
-            ELSE 4
-        END");
-
-        $vehicles = $vehiclesQuery->paginate(9)->withQueryString();
+        $vehicles = $vehiclesQuery->latest()->paginate(9)->withQueryString();
 
         return view('customer.vehicles.index', [
             'vehicles' => $vehicles,
-            'filters' => $validated,
+            'filters'  => $validated,
         ]);
     }
 
