@@ -23,7 +23,7 @@
                         Nikmati pilihan kendaraan yang dirancang untuk memenuhi setiap kebutuhan perjalanan Anda. Hadirkan
                         kenyamanan dan pengalaman perjalanan yang lebih berkualitas.
                     </p>
-                    <a href="#"
+                    <a href="{{ route('login') }}"
                         class="inline-block px-8 py-4 bg-primary-main hover:bg-primary-dark text-white font-bold rounded-lg transition-all duration-300 shadow-2xl hover:shadow-primary-main/40 hover:shadow-2xl transform hover:translate-y-1">
                         Lihat Armada
                     </a>
@@ -181,7 +181,7 @@
                     khusus anggota.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#"
+                    <a href="{{ route('login') }}"
                         class="inline-block px-10 py-4 bg-white text-primary-main font-bold rounded-lg hover:bg-gray-50 transition-all duration-300 shadow-2xl hover:shadow-[0_20px_40px_rgba(255,255,255,0.2)] transform hover:scale-105">
                         Pesan Sekarang
                     </a>
