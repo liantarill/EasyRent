@@ -302,7 +302,7 @@
             </div>
 
             <!-- Password Change Section -->
-            {{-- <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            <section class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl bg-[#f59e0b]/10 flex items-center justify-center">
@@ -320,13 +320,13 @@
                         <p class="text-sm text-yellow-800">Pastikan password baru Anda kuat dan unik. Minimal 8
                             karakter dengan kombinasi huruf dan angka.</p>
                     </div>
-                    <button type="button" onclick="alert('Fitur ubah password akan segera tersedia!')"
+                    <a href="{{ route('reset-password.index') }}""
                         class="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#f59e0b] text-[#f59e0b] font-semibold rounded-xl hover:bg-[#f59e0b] hover:text-white active:scale-95 transition-all duration-300">
                         <i class="fas fa-key"></i>
                         Ubah Password
-                    </button>
+                    </a>
                 </div>
-            </section> --}}
+            </section>
         </div>
     </div>
 

@@ -1,5 +1,8 @@
 @props(['vehicle', 'rentDate' => null, 'returnDate' => null])
-
+@php
+    $customer = auth()->user();
+    $canRent = $customer && $customer->hasCompletedProfile();
+@endphp
 <div
     class="border border-gray-100 rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300">
 
@@ -79,18 +82,32 @@
                 </a>
 
                 <!-- Rent Button -->
+
                 @if (!$vehicle->is_rented && $rentDate && $returnDate)
-                    <form action="{{ route('customer.rents.store', $vehicle->id) }}" method="POST"
-                        @if (!$rentDate || !$returnDate) onsubmit="alert('Silakan pilih tanggal terlebih dahulu'); return false;" @endif>
-                        @csrf
-                        <input type="hidden" name="rent_date" value="{{ $rentDate }}">
-                        <input type="hidden" name="return_date" value="{{ $returnDate }}">
-                        <button type="submit"
-                            class="btn-sewa block w-full px-3 py-2 bg-primary-main text-white rounded-md font-medium text-sm hover:bg-primary-dark transition">
-                            <i class="fa-solid fa-car-side mr-1.5"></i> Sewa
-                        </button>
-                    </form>
+                    @if ($canRent)
+                        <form action="{{ route('customer.rents.store', $vehicle->id) }}" method="POST"
+                            @if (!$rentDate || !$returnDate) onsubmit="alert('Silakan pilih tanggal terlebih dahulu'); return false;" @endif>
+                            @csrf
+                            <input type="hidden" name="rent_date" value="{{ $rentDate }}">
+                            <input type="hidden" name="return_date" value="{{ $returnDate }}">
+                            <button type="submit"
+                                class="btn-sewa block w-full px-3 py-2 bg-primary-main text-white rounded-md font-medium text-sm hover:bg-primary-dark transition">
+                                <i class="fa-solid fa-car-side mr-1.5"></i> Sewa
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('customer.profile') }}"
+                            class="inline-flex items-center justify-center text-center gap-1 px-3 py-1.5 rounded text-sm w-full font-medium transition-colors bg-amber-100 text-amber-600 hover:bg-amber-200">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                </path>
+                            </svg>
+                            Lengkapi Profil Untuk Menyewa
+                        </a>
+                    @endif
                 @endif
+
             </div>
         </div>
     </div>

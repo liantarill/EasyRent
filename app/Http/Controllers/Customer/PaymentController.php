@@ -213,13 +213,13 @@ class PaymentController extends Controller
                     // Update rent status to Verified
                     $payment->rent->update(['rent_status' => 'Verified']);
                     // Update vehicle status to Rented
-                    $payment->rent->vehicle->update(['status' => 'Rented']);
+                    // $payment->rent->vehicle->update(['status' => 'Rented']); 
                 }
             } elseif ($transactionStatus == 'settlement') {
                 $payment->update(['status' => 'Paid']);
                 $payment->rent->update(['rent_status' => 'Verified']);
                 // Update vehicle status to Rented
-                $payment->rent->vehicle->update(['status' => 'Rented']);
+                // $payment->rent->vehicle->update(['status' => 'Rented']);
             } elseif ($transactionStatus == 'pending') {
                 $payment->update(['status' => 'Pending']);
             } elseif (in_array($transactionStatus, ['deny', 'expire'])) {
